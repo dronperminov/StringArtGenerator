@@ -1,0 +1,69 @@
+.control-block {
+    margin-bottom: 8px;
+    padding: 5px;
+    user-select: none;
+    text-align: left;
+}
+
+.control-block input[type="text"],
+.control-block input[type="number"],
+.control-block input[type="range"],
+.control-block select {
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #808080;
+    padding: 0;
+    background: #fff;
+}
+
+.control-block input[type="number"].half {
+    width: 48%;
+}
+
+.control-block input[type="text"]:focus,
+.control-block input[type="range"],
+.control-block input[type="number"]:focus,
+.control-block select:focus {
+    outline: none;
+    border-bottom: 1px solid #90caf9;
+}
+
+.control-block input[type="text"]:enabled:hover,
+.control-block input[type="range"],
+.control-block input[type="number"]:enabled:hover,
+.control-block select:enabled:hover {
+    outline: none;
+    border-bottom: 1px solid #90caf9;
+}
+
+.control-block input[type="submit"] {
+    background: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.control-block input[type="submit"]:focus {
+    border: 2px solid #90caf9;
+}
+
+.control-block input[type="submit"]:enabled:hover {
+    border: 2px solid #90caf9;
+    color: #90caf9;
+    cursor: pointer;
+}
+
+.control-block hr {
+    margin-top: 0;
+}
+
+.controls-section {
+    border-top: 1px solid #000;
+}
+
+.controls-section .header {
+    padding: 5px;
+    font-weight: bold;
+    font-size: 1.15em;
+    cursor: pointer;
+}

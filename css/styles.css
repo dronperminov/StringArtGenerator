@@ -1,0 +1,25 @@
+.generator {
+    display: grid;
+    grid-template-columns: 230px 600px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.generator input, .generator select, .generator label {
+    font-family: Ubuntu;
+    font-size: 18px;
+}
+
+.view canvas {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid #000;
+}
+
+.centered {
+    text-align: center !important;
+}
+
+.no-top-padding {
+    padding-top: 0 !important;
+}
