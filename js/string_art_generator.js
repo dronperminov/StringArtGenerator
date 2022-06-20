@@ -129,6 +129,7 @@ StringArtGenerator.prototype.Reset = function() {
     this.resetBtn.setAttribute('disabled', '')
     this.generateBtn.removeAttribute('disabled')
 
+    this.Clear()
     this.DrawLoadedImage()
 }
 

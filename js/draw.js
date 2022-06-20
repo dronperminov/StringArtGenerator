@@ -34,8 +34,8 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
     let x = (this.width - width) / 2
     let y = (this.height - height) / 2
 
-    this.Clear()
     this.ctx.save()
+    this.ctx.beginPath()
     this.ctx.arc(this.x0, this.y0, this.radius + PADDING / 2, 0, Math.PI * 2)
     this.ctx.clip()
     this.ctx.drawImage(this.image, x, y, width, height)
