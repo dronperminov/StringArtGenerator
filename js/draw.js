@@ -2,6 +2,10 @@ StringArtGenerator.prototype.Clear = function() {
     this.ctx.clearRect(0, 0, this.width, this.height)
 }
 
+StringArtGenerator.prototype.GetLightness = function(red, green, blue) {
+    return Math.floor(0.2126 * red + 0.7152 * green + 0.0722 * blue)
+}
+
 StringArtGenerator.prototype.DrawGrayScale = function() {
     let data = this.ctx.getImageData(0, 0, this.width, this.height)
     let pixels = data.data
@@ -33,10 +37,16 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
 
     let x = (this.width - width) / 2
     let y = (this.height - height) / 2
+    let form = this.formTypeBox.value
 
     this.ctx.save()
     this.ctx.beginPath()
-    this.ctx.arc(this.x0, this.y0, this.radius + PADDING / 2, 0, Math.PI * 2)
+
+    if (form == CIRCLE_FORM)
+        this.ctx.arc(this.x0, this.y0, this.radius + PADDING / 2, 0, Math.PI * 2)
+    else if (form == RECT_FORM)
+        this.ctx.rect(0, 0, this.width, this.height)
+
     this.ctx.clip()
     this.ctx.drawImage(this.image, x, y, width, height)
     this.DrawGrayScale()

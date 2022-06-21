@@ -1,33 +1,8 @@
 function StringArtGenerator(canvas) {
-    this.controlsBox = document.getElementById('controls-box')
-
-    this.nailsCountBox = document.getElementById('nails-count-box')
-    this.linesCountBox = document.getElementById('lines-count-box')
-    this.linesWeightBox = document.getElementById('lines-weight-box')
-    this.infoBox = document.getElementById('info-box')
-
-    this.generateBtn = document.getElementById('generate-btn')
-    this.generateBtn.addEventListener('click', () => this.Generate())
-
-    this.resetBtn = document.getElementById('reset-btn')
-    this.resetBtn.addEventListener('click', () => this.Reset())
-
-    this.saveBox = document.getElementById('save-box')
-
-    this.saveTypeBox = document.getElementById('save-type-box')
-    this.saveBtn = document.getElementById('save-btn')
-    this.saveBtn.addEventListener('click', () => this.Save())
-
     this.InitCanvas(canvas)
     this.InitSelectButton()
-
-    this.controls = [
-        this.selectBtn,
-        this.nailsCountBox,
-        this.linesCountBox,
-        this.linesWeightBox,
-        this.resetBtn
-    ]
+    this.InitControls()
+    this.InitSave()
 }
 
 StringArtGenerator.prototype.SelectImage = function(e) {
@@ -47,10 +22,6 @@ StringArtGenerator.prototype.LoadImage = function(image) {
     this.image = image
     this.controlsBox.style.display = ''
     this.Reset()
-}
-
-StringArtGenerator.prototype.GetLightness = function(red, green, blue) {
-    return Math.floor(0.2126 * red + 0.7152 * green + 0.0722 * blue)
 }
 
 StringArtGenerator.prototype.GetPixels = function() {
