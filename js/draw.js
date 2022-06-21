@@ -44,10 +44,20 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
 
     let formType = this.formTypeBox.value
 
-    if (formType == CIRCLE_FORM)
+    if (formType == CIRCLE_FORM) {
         this.ctx.arc(this.x0, this.y0, this.radius + PADDING / 2, 0, Math.PI * 2)
-    else if (formType == RECT_FORM)
+    }
+    else if (formType == RECT_FORM) {
         this.ctx.rect(0, 0, this.width, this.height)
+    }
+    else if (formType == ALBUM_FORM) {
+        let height = this.width / Math.sqrt(2)
+        this.ctx.rect(0, (this.height - height) / 2, this.width, height)
+    }
+    else if (formType == PORTRAIT_FORM) {
+        let width = this.height / Math.sqrt(2)
+        this.ctx.rect((this.width - width) / 2, 0, width, this.height)
+    }
 
     this.ctx.clip()
     this.ctx.drawImage(this.image, this.imgX, this.imgY, this.imgWidth * this.imgScale, this.imgHeight * this.imgScale)
