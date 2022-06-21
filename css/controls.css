@@ -14,7 +14,7 @@
     border: none;
     border-bottom: 1px solid #808080;
     padding: 0;
-    background: #fff;
+    background: transparent;
 }
 
 .control-block input[type="text"]:disabled,
@@ -22,6 +22,7 @@
 .control-block input[type="range"]:disabled,
 .control-block select:disabled {
     color: #aaa;
+    pointer-events: none;
 }
 
 .control-block input[type="number"].half {
@@ -33,7 +34,7 @@
 .control-block input[type="number"]:focus,
 .control-block select:focus {
     outline: none;
-    border-bottom: 1px solid #90caf9;
+    border-bottom: 1px solid #0062cc;
 }
 
 .control-block input[type="text"]:enabled:hover,
@@ -41,23 +42,31 @@
 .control-block input[type="number"]:enabled:hover,
 .control-block select:enabled:hover {
     outline: none;
-    border-bottom: 1px solid #90caf9;
+    border-bottom: 1px solid #0062cc;
 }
 
 .control-block input[type="submit"] {
-    background: none;
-    padding: 5px;
+    background: #007bff;
+    color: #fff;
+    padding: 8px 6px;
+    border: 2px solid #007bff;
     border-radius: 5px;
+    outline: none;
 }
 
 .control-block input[type="submit"]:focus {
-    border: 2px solid #90caf9;
+    border-color: #0062cc;
 }
 
 .control-block input[type="submit"]:enabled:hover {
-    border: 2px solid #90caf9;
-    color: #90caf9;
+    background: #0062cc;
+    border-color: #0062cc;
     cursor: pointer;
+}
+
+.control-block input[type="submit"]:disabled {
+    background: #aaa;
+    border-color: #aaa;
 }
 
 .control-block hr {

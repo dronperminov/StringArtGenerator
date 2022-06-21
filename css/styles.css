@@ -1,8 +1,23 @@
 .generator {
-    display: grid;
-    grid-template-columns: 230px 600px;
+    display: table;
     border-collapse: collapse;
-    width: 100%;
+    border: 1px solid #000;
+    margin: 0 auto;
+}
+
+.controls {
+    display: table-cell;
+    width: 280px;
+    vertical-align: top;
+    padding-top: 10px;
+    background: #e9ecef;
+}
+
+.view {
+    display: table-cell;
+    width: 600px;
+    vertical-align: top;
+    padding: 10px 5px;
 }
 
 .generator input, .generator select, .generator label {
