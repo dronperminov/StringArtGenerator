@@ -3,6 +3,7 @@
     border-collapse: collapse;
     border: 1px solid #000;
     margin: 0 auto;
+    position: relative;
 }
 
 .controls {
@@ -40,6 +41,31 @@
 
 .no-margin {
     margin: 0;
+}
+
+.drag-drop {
+    background: #e9ecef88;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    font-size: 2.5em;
+    color: #0062cc;
+    pointer-events: none;
+    user-select: none;
+}
+
+.drag-drop-table {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.drag-drop-table div {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
 }
 
 @media (max-width: 600px) {

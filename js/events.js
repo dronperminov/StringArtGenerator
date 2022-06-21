@@ -69,3 +69,27 @@ StringArtGenerator.prototype.MouseWheel = function(e) {
     this.NormalizePoint()
     this.DrawLoadedImage()
 }
+
+StringArtGenerator.prototype.DragOver = function(e) {
+    this.dragDropBox.style.display = ''
+    e.preventDefault()
+}
+
+StringArtGenerator.prototype.DragLeave = function(e) {
+    this.dragDropBox.style.display = 'none'
+    e.preventDefault()
+}
+
+StringArtGenerator.prototype.Drop = function(e) {
+    e.preventDefault()
+    this.dragDropBox.style.display = 'none'
+
+    if (e.dataTransfer.files.length != 1) {
+        alert("Можно перетащить не более одного файла")
+        return
+    }
+
+    let image = new Image()
+    image.onload = () => this.LoadImage(image)
+    image.src = URL.createObjectURL(e.dataTransfer.files[0])
+}

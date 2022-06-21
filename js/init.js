@@ -23,6 +23,10 @@ StringArtGenerator.prototype.InitCanvas = function(canvas) {
     this.canvas.addEventListener('mouseleave', (e) => this.MouseUp(e))
     this.canvas.addEventListener('mousewheel', (e) => this.MouseWheel(e))
 
+    this.canvas.addEventListener('dragover', (e) => this.DragOver(e))
+    this.canvas.addEventListener('dragleave', (e) => this.DragLeave(e))
+    this.canvas.addEventListener('drop', (e) => this.Drop(e))
+
     this.x0 = this.width / 2
     this.y0 = this.height / 2
     this.radius = Math.min(this.width, this.height) / 2 - PADDING
@@ -39,6 +43,7 @@ StringArtGenerator.prototype.InitSelectButton = function() {
 }
 
 StringArtGenerator.prototype.InitControls = function() {
+    this.dragDropBox = document.getElementById('drag-drop-box')
     this.controlsBox = document.getElementById('controls-box')
 
     this.formTypeBox = document.getElementById('form-type-box')
