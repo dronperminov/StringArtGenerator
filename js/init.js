@@ -109,31 +109,50 @@ StringArtGenerator.prototype.InitNails = function() {
             nail = this.GetRectNail(t)
         }
 
+        nail.x = Math.round(nail.x)
+        nail.y = Math.round(nail.y)
+
         this.nails.push(nail)
     }
 }
 
+StringArtGenerator.prototype.LineRasterization = function(x1, y1, x2, y2) {
+    let line = new Set()
+
+    let delta_x = Math.abs(x2 - x1)
+    let delta_y = Math.abs(y2 - y1)
+
+    let sign_x = Math.sign(x2 - x1)
+    let sign_y = Math.sign(y2 - y1)
+
+    let error = delta_x - delta_y
+
+    while (x1 != x2 || y1 != y2) {
+        line.add(y1 * this.width + x1)
+        error2 = error * 2
+
+        if (error2 > -delta_y) {
+            error -= delta_y
+            x1 += sign_x
+        }
+
+        if (error2 < delta_x) {
+            error += delta_x
+            y1 += sign_y
+        }
+    }
+
+    line.add(y2 * this.width + x2)
+    return line
+}
+
 StringArtGenerator.prototype.InitLines = function() {
-    let ts = []
-
-    for (let i = 0; i <= LINE_SECTIONS; i++)
-        ts.push(i / LINE_SECTIONS)
-
     this.lines = []
 
     for (let i = 0; i < this.nails.length; i++) {
         this.lines[i] = []
 
-        for (let j = 0; j < i; j++) {
-            let line = new Set()
-
-            for (let t of ts) {
-                let x = Math.floor(this.nails[i].x * t + this.nails[j].x * (1 - t))
-                let y = Math.floor(this.nails[i].y * t + this.nails[j].y * (1 - t))
-                line.add(y * this.width + x)
-            }
-
-            this.lines[i][j] = line
-        }
+        for (let j = 0; j < i; j++)
+            this.lines[i][j] = this.LineRasterization(this.nails[i].x, this.nails[i].y, this.nails[j].x, this.nails[j].y)
     }
 }
