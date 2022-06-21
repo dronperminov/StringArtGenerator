@@ -18,7 +18,7 @@ StringArtGenerator.prototype.LimitPixel = function(value) {
 }
 
 StringArtGenerator.prototype.DrawGrayScale = function() {
-    let data = this.ctx.getImageData(0, 0, this.width, this.height)
+    let data = this.ctx.getImageData(0, 0, this.width * this.dpr, this.height * this.dpr)
     let pixels = data.data
 
     for (let i = 0; i < pixels.length; i += 4) {
@@ -33,7 +33,7 @@ StringArtGenerator.prototype.DrawGrayScale = function() {
     }
 
     this.fakeCtx.putImageData(data, 0, 0)
-    this.ctx.drawImage(this.fakeCanvas, 0, 0)
+    this.ctx.drawImage(this.fakeCanvas, 0, 0, this.width, this.height)
 }
 
 StringArtGenerator.prototype.DrawLoadedImage = function() {

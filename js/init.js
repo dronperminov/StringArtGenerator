@@ -3,13 +3,19 @@ StringArtGenerator.prototype.InitCanvas = function(canvas) {
     this.ctx = this.canvas.getContext('2d')
     this.width = this.canvas.clientWidth
     this.height = this.canvas.clientHeight
-    this.canvas.width = this.width
-    this.canvas.height = this.height
+
+    this.dpr = window.devicePixelRatio || 1
+    this.canvas.width = this.width * this.dpr
+    this.canvas.height = this.height * this.dpr
+    this.ctx.scale(this.dpr, this.dpr)
+    this.canvas.style.width = this.width + "px"
+    this.canvas.style.height = this.height + "px"
 
     this.fakeCanvas = document.createElement('canvas')
-    this.fakeCanvas.width = this.width
-    this.fakeCanvas.height = this.height
+    this.fakeCanvas.width = this.width * this.dpr
+    this.fakeCanvas.height = this.height * this.dpr
     this.fakeCtx = this.fakeCanvas.getContext('2d')
+    this.fakeCtx.scale(this.dpr, this.dpr)
 
     this.canvas.addEventListener('mousedown', (e) => this.MouseDown(e))
     this.canvas.addEventListener('mousemove', (e) => this.MouseMove(e))
