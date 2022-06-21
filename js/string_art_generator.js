@@ -21,6 +21,8 @@ StringArtGenerator.prototype.SelectImage = function(e) {
 StringArtGenerator.prototype.LoadImage = function(image) {
     this.image = image
     this.controlsBox.style.display = ''
+    this.isLineDrawing = false
+
     this.Reset()
 }
 
@@ -92,28 +94,55 @@ StringArtGenerator.prototype.ShowInfo = function(linesCount, startTime) {
     this.infoBox.innerHTML += `<b>Ср. время линии:</b> ${avg}`
 }
 
-StringArtGenerator.prototype.Reset = function() {
+StringArtGenerator.prototype.ResetImage = function() {
+    this.imgWidth = this.image.width
+    this.imgHeight = this.image.height
+    let aspectRatio = this.imgWidth / this.imgHeight
+
+    if (this.imgWidth > this.imgHeight) {
+        this.imgWidth = this.width
+        this.imgHeight = this.width / aspectRatio
+    }
+    else {
+        this.imgHeight = this.height
+        this.imgWidth = this.imgHeight * aspectRatio
+    }
+
+    this.imgX = 0
+    this.imgY = 0
+    this.imgScale = 1
+}
+
+StringArtGenerator.prototype.Reset = function(needResetImage = true) {
+    if (needResetImage)
+        this.ResetImage()
+
     this.saveBox.style.display = 'none'
     this.infoBox.innerHTML = ''
+    this.isGenerating = false
+    this.isLineDrawing = false
     this.sequence = []
 
-    this.resetBtn.setAttribute('disabled', '')
     this.generateBtn.removeAttribute('disabled')
 
-    this.Clear()
     this.DrawLoadedImage()
 }
 
 StringArtGenerator.prototype.StartGenerate = function(){
+    this.Reset(false)
+
+    this.isLineDrawing = true
+    this.isGenerating = true
+
     for (let control of this.controls)
         control.setAttribute('disabled', '')
 
-    this.Reset()
     this.generateBtn.setAttribute('disabled', '')
 }
 
 StringArtGenerator.prototype.EndGenerate = function() {
     this.saveBox.style.display = ''
+    this.isGenerating = false
 
     for (let control of this.controls)
         control.removeAttribute('disabled')

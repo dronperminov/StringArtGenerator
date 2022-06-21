@@ -6,6 +6,12 @@ StringArtGenerator.prototype.InitCanvas = function(canvas) {
     this.canvas.width = this.width
     this.canvas.height = this.height
 
+    this.canvas.addEventListener('mousedown', (e) => this.MouseDown(e))
+    this.canvas.addEventListener('mousemove', (e) => this.MouseMove(e))
+    this.canvas.addEventListener('mouseup', (e) => this.MouseUp(e))
+    this.canvas.addEventListener('mouseleave', (e) => this.MouseUp(e))
+    this.canvas.addEventListener('mousewheel', (e) => this.MouseWheel(e))
+
     this.x0 = this.width / 2
     this.y0 = this.height / 2
     this.radius = Math.min(this.width, this.height) / 2 - PADDING
@@ -25,7 +31,7 @@ StringArtGenerator.prototype.InitControls = function() {
     this.controlsBox = document.getElementById('controls-box')
 
     this.formTypeBox = document.getElementById('form-type-box')
-    this.formTypeBox.addEventListener('change', () => this.Reset())
+    this.formTypeBox.addEventListener('change', () => this.Reset(false))
 
     this.nailsCountBox = document.getElementById('nails-count-box')
     this.linesCountBox = document.getElementById('lines-count-box')
@@ -36,7 +42,7 @@ StringArtGenerator.prototype.InitControls = function() {
     this.generateBtn.addEventListener('click', () => this.Generate())
 
     this.resetBtn = document.getElementById('reset-btn')
-    this.resetBtn.addEventListener('click', () => this.Reset())
+    this.resetBtn.addEventListener('click', () => this.Reset(!this.isLineDrawing))
 
     this.controls = [
         this.selectBtn,
@@ -96,16 +102,16 @@ StringArtGenerator.prototype.InitNails = function() {
 
     let nailsCount = +this.nailsCountBox.value
     let angle = 2 * Math.PI / nailsCount
-    let form = this.formTypeBox.value
+    let formType = this.formTypeBox.value
 
     for (let i = 0; i < nailsCount; i++) {
         let nail = {x: 0, y: 0}
         let t = i * angle
 
-        if (form == CIRCLE_FORM) {
+        if (formType == CIRCLE_FORM) {
             nail = this.GetCircleNail(t)
         }
-        else if (form == RECT_FORM) {
+        else if (formType == RECT_FORM) {
             nail = this.GetRectNail(t)
         }
 

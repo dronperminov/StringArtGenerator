@@ -1,5 +1,6 @@
 StringArtGenerator.prototype.Clear = function() {
-    this.ctx.clearRect(0, 0, this.width, this.height)
+    this.ctx.fillStyle = BACKGROUND_COLOR
+    this.ctx.fillRect(0, 0, this.width, this.height)
 }
 
 StringArtGenerator.prototype.GetLightness = function(red, green, blue) {
@@ -22,33 +23,21 @@ StringArtGenerator.prototype.DrawGrayScale = function() {
 }
 
 StringArtGenerator.prototype.DrawLoadedImage = function() {
-    let width = this.image.width
-    let height = this.image.height
-    let aspectRatio = width / height
-
-    if (width > height) {
-        width = this.width
-        height = this.width / aspectRatio
-    }
-    else {
-        height = this.height
-        width = height * aspectRatio
-    }
-
-    let x = (this.width - width) / 2
-    let y = (this.height - height) / 2
-    let form = this.formTypeBox.value
-
+    this.Clear()
     this.ctx.save()
+    this.ctx.strokeStyle = BORDER_COLOR
     this.ctx.beginPath()
 
-    if (form == CIRCLE_FORM)
+    let formType = this.formTypeBox.value
+
+    if (formType == CIRCLE_FORM)
         this.ctx.arc(this.x0, this.y0, this.radius + PADDING / 2, 0, Math.PI * 2)
-    else if (form == RECT_FORM)
+    else if (formType == RECT_FORM)
         this.ctx.rect(0, 0, this.width, this.height)
 
+    this.ctx.stroke()
     this.ctx.clip()
-    this.ctx.drawImage(this.image, x, y, width, height)
+    this.ctx.drawImage(this.image, this.imgX, this.imgY, this.imgWidth * this.imgScale, this.imgHeight * this.imgScale)
     this.DrawGrayScale()
     this.ctx.restore()
 }
