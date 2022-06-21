@@ -36,17 +36,17 @@ StringArtGenerator.prototype.InitControls = function() {
     this.controlsBox = document.getElementById('controls-box')
 
     this.formTypeBox = document.getElementById('form-type-box')
-    this.formTypeBox.addEventListener('change', () => this.Reset(false))
+    this.formTypeBox.addEventListener('change', () => this.DrawLoadedImage())
 
     this.contrastBox = document.getElementById('contrast-box')
     this.contrastValue = document.getElementById('contrast-value')
-    this.contrastBox.addEventListener('change', () => { this.UpdateContrast(); this.DrawLoadedImage() })
     this.contrastBox.addEventListener('input', () => this.UpdateContrast())
+    this.contrastBox.addEventListener('change', () => this.DrawLoadedImage())
 
     this.brightnessBox = document.getElementById('brightness-box')
     this.brightnessValue = document.getElementById('brightness-value')
-    this.brightnessBox.addEventListener('change', () => { this.UpdateBrightness(); this.DrawLoadedImage() })
     this.brightnessBox.addEventListener('input', () => this.UpdateBrightness())
+    this.brightnessBox.addEventListener('change', () => this.DrawLoadedImage())
 
     this.nailsCountBox = document.getElementById('nails-count-box')
     this.linesCountBox = document.getElementById('lines-count-box')

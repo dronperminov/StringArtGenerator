@@ -153,15 +153,21 @@ StringArtGenerator.prototype.Reset = function(needResetImage = true) {
     this.infoBox.innerHTML = ''
     this.isGenerating = false
     this.isLineDrawing = false
-    this.sequence = []
+
+    for (let control of this.controls)
+        control.removeAttribute('disabled')
 
     this.generateBtn.removeAttribute('disabled')
 
     this.DrawLoadedImage()
 }
 
-StringArtGenerator.prototype.StartGenerate = function(){
-    this.Reset(false)
+StringArtGenerator.prototype.StartGenerate = function() {
+    this.saveBox.style.display = 'none'
+    this.infoBox.innerHTML = ''
+    this.sequence = []
+
+    this.DrawLoadedImage()
 
     this.isLineDrawing = true
     this.isGenerating = true
@@ -176,8 +182,8 @@ StringArtGenerator.prototype.EndGenerate = function() {
     this.saveBox.style.display = ''
     this.isGenerating = false
 
-    for (let control of this.controls)
-        control.removeAttribute('disabled')
+    this.resetBtn.removeAttribute('disabled')
+    this.selectBtn.removeAttribute('disabled')
 }
 
 StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, pixels, lineWeight, startTime) {
