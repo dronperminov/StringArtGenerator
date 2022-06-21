@@ -65,8 +65,9 @@
 }
 
 .control-block input[type="submit"]:disabled {
-    background: #aaa;
-    border-color: #aaa;
+    background: #ddd;
+    border-color: #ddd;
+    color: #aaa;
 }
 
 .control-block hr {

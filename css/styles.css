@@ -15,7 +15,7 @@
 
 .view {
     display: table-cell;
-    width: 600px;
+    width: min(85vh, 50vw);
     vertical-align: top;
     padding: 10px 5px;
 }
@@ -40,4 +40,15 @@
 
 .no-margin {
     margin: 0;
+}
+
+@media (max-width: 600px) {
+    .generator {
+        display: block;
+    }
+
+    .view, .controls {
+        display: block;
+        width: auto;
+    }
 }
