@@ -150,7 +150,7 @@ StringArtGenerator.prototype.Reset = function(needResetImage = true) {
         this.ResetImage()
 
     this.saveBox.style.display = 'none'
-    this.infoBox.innerHTML = ''
+    this.infoBox.innerHTML = '<b>Основные действия:</b><br><b>Масштабирование</b> - скроллинг<br><b>Перемещение</b> - левая кнопка мыши'
     this.isGenerating = false
     this.isLineDrawing = false
 
