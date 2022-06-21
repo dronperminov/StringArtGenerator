@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Генератор string art изображений</title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link rel="stylesheet" type="text/css" href="css/controls.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
     <h1>Генератор изображений в стиле String art</h1>
@@ -17,7 +17,7 @@
 
             <div id="controls-box" style="display: none">
                 <div class="control-block no-top-padding">
-                    <label><b>Форма:</b>
+                    <label><b>Форма</b>
                         <select id="form-type-box">
                             <option value="circle" selected>круг</option>
                             <option value="rect">прямоугольник</option>
@@ -25,7 +25,19 @@
                     </label>
                 </div>
 
-                <div class="control-block">
+                <div class="control-block no-margin">
+                    <label><b>Контрастность</b><br>
+                        <input type="range" id="contrast-box" value="0" min="-100" max="100" step="5">
+                    </label>
+                    <div class="range-label" id="contrast-value">0</div>
+
+                    <label><b>Яркость</b><br>
+                        <input type="range" id="brightness-box" value="0" min="-100" max="100" step="5">
+                    </label>
+                    <div class="range-label" id="brightness-value">0</div>
+                </div>
+
+                <div class="control-block no-top-padding">
                     <label><b>Количество гвоздей</b><br>
                         <input type="number" id="nails-count-box" value="250" min="50" max="1000">
                     </label>

@@ -26,6 +26,38 @@ StringArtGenerator.prototype.LoadImage = function(image) {
     this.Reset()
 }
 
+StringArtGenerator.prototype.ToSignString = function(value) {
+    if (value > 0)
+        return `+${value}`
+
+    if (value < 0)
+        return `-${-value}`
+
+    return '0'
+}
+
+StringArtGenerator.prototype.UpdateContrast = function() {
+    let value = +this.contrastBox.value
+    let contrast = 1 + value / 100
+
+    this.contrastValue.innerHTML = this.ToSignString(value)
+    this.contrastTable = []
+
+    for (let i = 0; i < 256; i++)
+        this.contrastTable[i] = this.LimitPixel((i - 128) * contrast + 128)
+}
+
+StringArtGenerator.prototype.UpdateBrightness = function() {
+    let value = +this.brightnessBox.value
+    let brightness = 1 + value / 100
+
+    this.brightnessValue.innerHTML = this.ToSignString(+this.brightnessBox.value)
+    this.brightnessTable = []
+
+    for (let i = 0; i < 256; i++)
+        this.brightnessTable[i] = this.LimitPixel(i * brightness)
+}
+
 StringArtGenerator.prototype.GetPixels = function() {
     let data = this.ctx.getImageData(0, 0, this.width, this.height).data
     let pixels = []

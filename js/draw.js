@@ -7,19 +7,33 @@ StringArtGenerator.prototype.GetLightness = function(red, green, blue) {
     return Math.floor(0.2126 * red + 0.7152 * green + 0.0722 * blue)
 }
 
+StringArtGenerator.prototype.LimitPixel = function(value) {
+    if (value < 0)
+        return 0
+
+    if (value > 255)
+        return 255
+
+    return Math.round(value)
+}
+
 StringArtGenerator.prototype.DrawGrayScale = function() {
     let data = this.ctx.getImageData(0, 0, this.width, this.height)
     let pixels = data.data
-    
+
     for (let i = 0; i < pixels.length; i += 4) {
         let lightness = this.GetLightness(pixels[i], pixels[i + 1], pixels[i + 2])
+
+        lightness = this.brightnessTable[lightness]
+        lightness = this.contrastTable[lightness]
 
         pixels[i] = lightness
         pixels[i + 1] = lightness
         pixels[i + 2] = lightness
     }
 
-    this.ctx.putImageData(data, 0, 0)
+    this.fakeCtx.putImageData(data, 0, 0)
+    this.ctx.drawImage(this.fakeCanvas, 0, 0)
 }
 
 StringArtGenerator.prototype.DrawLoadedImage = function() {

@@ -17,6 +17,13 @@
     background: #fff;
 }
 
+.control-block input[type="text"]:disabled,
+.control-block input[type="number"]:disabled,
+.control-block input[type="range"]:disabled,
+.control-block select:disabled {
+    color: #aaa;
+}
+
 .control-block input[type="number"].half {
     width: 48%;
 }
@@ -56,6 +63,16 @@
 .control-block hr {
     margin-top: 0;
 }
+
+.control-block .range-label {
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.control-block input[type="range"]:disabled > .range-label {
+    color: #aaa;
+}
+
 
 .controls-section {
     border-top: 1px solid #000;

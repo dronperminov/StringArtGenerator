@@ -6,6 +6,11 @@ StringArtGenerator.prototype.InitCanvas = function(canvas) {
     this.canvas.width = this.width
     this.canvas.height = this.height
 
+    this.fakeCanvas = document.createElement('canvas')
+    this.fakeCanvas.width = this.width
+    this.fakeCanvas.height = this.height
+    this.fakeCtx = this.fakeCanvas.getContext('2d')
+
     this.canvas.addEventListener('mousedown', (e) => this.MouseDown(e))
     this.canvas.addEventListener('mousemove', (e) => this.MouseMove(e))
     this.canvas.addEventListener('mouseup', (e) => this.MouseUp(e))
@@ -33,6 +38,16 @@ StringArtGenerator.prototype.InitControls = function() {
     this.formTypeBox = document.getElementById('form-type-box')
     this.formTypeBox.addEventListener('change', () => this.Reset(false))
 
+    this.contrastBox = document.getElementById('contrast-box')
+    this.contrastValue = document.getElementById('contrast-value')
+    this.contrastBox.addEventListener('change', () => { this.UpdateContrast(); this.DrawLoadedImage() })
+    this.contrastBox.addEventListener('input', () => this.UpdateContrast())
+
+    this.brightnessBox = document.getElementById('brightness-box')
+    this.brightnessValue = document.getElementById('brightness-value')
+    this.brightnessBox.addEventListener('change', () => { this.UpdateBrightness(); this.DrawLoadedImage() })
+    this.brightnessBox.addEventListener('input', () => this.UpdateBrightness())
+
     this.nailsCountBox = document.getElementById('nails-count-box')
     this.linesCountBox = document.getElementById('lines-count-box')
     this.linesWeightBox = document.getElementById('lines-weight-box')
@@ -46,12 +61,17 @@ StringArtGenerator.prototype.InitControls = function() {
 
     this.controls = [
         this.selectBtn,
+        this.contrastBox,
+        this.brightnessBox,
         this.formTypeBox,
         this.nailsCountBox,
         this.linesCountBox,
         this.linesWeightBox,
         this.resetBtn
     ]
+
+    this.UpdateContrast()
+    this.UpdateBrightness()
 }
 
 StringArtGenerator.prototype.InitSave = function() {

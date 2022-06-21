@@ -22,3 +22,7 @@
 .no-top-padding {
     padding-top: 0 !important;
 }
+
+.no-margin {
+    margin: 0;
+}
