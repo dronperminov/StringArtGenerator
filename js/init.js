@@ -173,7 +173,7 @@ StringArtGenerator.prototype.LineRasterization = function(x1, y1, x2, y2) {
     let error = delta_x - delta_y
 
     while (x1 != x2 || y1 != y2) {
-        line.add(y1 * this.width + x1)
+        line.add(y1 * this.width * this.dpr + x1)
         error2 = error * 2
 
         if (error2 > -delta_y) {
@@ -187,7 +187,7 @@ StringArtGenerator.prototype.LineRasterization = function(x1, y1, x2, y2) {
         }
     }
 
-    line.add(y2 * this.width + x2)
+    line.add(y2 * this.width * this.dpr + x2)
     return line
 }
 
@@ -197,7 +197,14 @@ StringArtGenerator.prototype.InitLines = function() {
     for (let i = 0; i < this.nails.length; i++) {
         this.lines[i] = []
 
-        for (let j = 0; j < i; j++)
-            this.lines[i][j] = this.LineRasterization(this.nails[i].x, this.nails[i].y, this.nails[j].x, this.nails[j].y)
+        for (let j = 0; j < i; j++) {
+            let x1 = this.nails[i].x * this.dpr
+            let y1 = this.nails[i].y * this.dpr
+
+            let x2 = this.nails[j].x * this.dpr
+            let y2 = this.nails[j].y * this.dpr
+
+            this.lines[i][j] = this.LineRasterization(x1, y1, x2, y2)
+        }
     }
 }

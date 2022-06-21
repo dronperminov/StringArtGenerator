@@ -59,7 +59,7 @@ StringArtGenerator.prototype.UpdateBrightness = function() {
 }
 
 StringArtGenerator.prototype.GetPixels = function() {
-    let data = this.ctx.getImageData(0, 0, this.width, this.height).data
+    let data = this.ctx.getImageData(0, 0, this.width * this.dpr, this.height * this.dpr).data
     let pixels = []
 
     for (let i = 0; i < data.length; i += 4)
@@ -101,7 +101,7 @@ StringArtGenerator.prototype.RemoveLine = function(i, j, pixels, lineWeight) {
     let line = i < j ? this.lines[j][i] : this.lines[i][j]
 
     for (let index of line)
-        pixels[index] = Math.min(255, pixels[index] + lineWeight)
+        pixels[index] = Math.min(255, pixels[index] + lineWeight * this.dpr)
 }
 
 StringArtGenerator.prototype.TimeToString = function(delta) {
