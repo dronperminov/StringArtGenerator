@@ -218,6 +218,25 @@ StringArtGenerator.prototype.Generate = function() {
     this.GenerateIteration(0, linesCount, pixels, lineWeight, startTime)
 }
 
+StringArtGenerator.prototype.ToSVG = function() {
+    let lineWeight = +this.linesWeightBox.value
+    let svg = `<svg viewBox="0 0 ${this.width} ${this.height}" width="512" height="512" version="1.1" xmlns="http://www.w3.org/2000/svg">\n`
+
+    for (let nail of this.nails)
+        svg += `    <circle cx="${nail.x}" cy="${nail.y}" r="${NAIL_RADIUS}" fill="${NAIL_COLOR}" />\n`
+
+    for (let i = 1; i < this.sequence.length; i++) {
+        let p1 = this.nails[this.sequence[i - 1]]
+        let p2 = this.nails[this.sequence[i]]
+
+        svg += `    <path d="M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}" line-width="1" stroke="rgba(0, 0, 0, ${lineWeight / 255})" fill="none" />\n`
+    }
+
+    svg += '</svg>'
+
+    return svg
+}
+
 StringArtGenerator.prototype.Save = function() {
     let type = this.saveTypeBox.value
     let link = document.createElement("a")
@@ -230,6 +249,10 @@ StringArtGenerator.prototype.Save = function() {
     else if (type == 'png') {
         link.href = this.canvas.toDataURL()
         link.download = 'art.png'
+    }
+    else if (type == 'svg') {
+        link.href = URL.createObjectURL(new Blob([this.ToSVG()], { type: 'svg' }))
+        link.download = 'art.svg'
     }
 
     link.click()
