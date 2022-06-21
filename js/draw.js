@@ -35,10 +35,10 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
     else if (formType == RECT_FORM)
         this.ctx.rect(0, 0, this.width, this.height)
 
-    this.ctx.stroke()
     this.ctx.clip()
     this.ctx.drawImage(this.image, this.imgX, this.imgY, this.imgWidth * this.imgScale, this.imgHeight * this.imgScale)
     this.DrawGrayScale()
+    this.ctx.stroke()
     this.ctx.restore()
 }
 
