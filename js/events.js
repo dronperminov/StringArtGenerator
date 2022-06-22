@@ -12,19 +12,8 @@ StringArtGenerator.prototype.Clip = function(value, min, max) {
 }
 
 StringArtGenerator.prototype.NormalizePoint = function() {
-    if (this.imgWidth <= this.width) {
-        this.imgX = this.Clip(this.imgX, 0, this.width - this.imgWidth * this.imgScale)
-    }
-    else {
-        this.imgX = this.Clip(this.imgX, -this.imgWidth + this.width / this.imgScale, this.imgWidth - this.width * this.imgScale)
-    }
-
-    if (this.imgHeight <= this.height) {
-        this.imgY = this.Clip(this.imgY, 0, this.height - this.imgHeight * this.imgScale)
-    }
-    else {
-        this.imgY = this.Clip(this.imgY, -this.imgHeight + this.height / this.imgScale, this.imgHeight - this.height * this.imgScale)
-    }
+    this.imgX = this.Clip(this.imgX, this.imgBbox.xmin, this.imgBbox.xmax - this.imgWidth * this.imgScale)
+    this.imgY = this.Clip(this.imgY, this.imgBbox.ymin, this.imgBbox.ymax - this.imgHeight * this.imgScale)
 }
 
 StringArtGenerator.prototype.TouchToPoint = function(touch) {

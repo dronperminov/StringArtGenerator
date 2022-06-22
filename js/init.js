@@ -250,3 +250,31 @@ StringArtGenerator.prototype.InitArt = function() {
     this.InitNails()
     this.InitLines()
 }
+
+StringArtGenerator.prototype.InitBbox = function() {
+    this.imgBbox = {
+        xmin: 0,
+        ymin: 0,
+        xmax: this.width,
+        ymax: this.height
+    }
+
+    let formType = this.formTypeBox.value
+
+    if (formType == ALBUM_FORM) {
+        let height = Math.round(this.width / Math.sqrt(2))
+        this.imgBbox.ymin = Math.round((this.height - height) / 2)
+        this.imgBbox.ymax = this.imgBbox.ymin + height
+    }
+    else if (formType == PORTRAIT_FORM) {
+        let width = Math.round(this.height / Math.sqrt(2))
+        this.imgBbox.xmin = Math.round((this.width - width) / 2)
+        this.imgBbox.xmax = this.imgBbox.xmin + width
+    }
+    else if (formType == IMAGE_FORM) {
+        this.imgBbox.xmax = this.imgWidth
+        this.imgBbox.ymax = this.imgHeight
+    }
+
+    this.NormalizePoint()
+}

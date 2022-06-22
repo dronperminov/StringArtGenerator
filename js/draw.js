@@ -17,6 +17,31 @@ StringArtGenerator.prototype.LimitPixel = function(value) {
     return Math.round(value)
 }
 
+StringArtGenerator.prototype.DrawForm = function() {
+    let formType = this.formTypeBox.value
+
+    this.ctx.strokeStyle = BORDER_COLOR
+    this.ctx.beginPath()
+
+    if (formType == CIRCLE_FORM) {
+        this.ctx.arc(this.x0, this.y0, this.radius + PADDING / 2, 0, Math.PI * 2)
+    }
+    else if (formType == RECT_FORM) {
+        this.ctx.rect(0, 0, this.width, this.height)
+    }
+    else if (formType == ALBUM_FORM) {
+        let height = this.width / Math.sqrt(2)
+        this.ctx.rect(0, (this.height - height) / 2, this.width, height)
+    }
+    else if (formType == PORTRAIT_FORM) {
+        let width = this.height / Math.sqrt(2)
+        this.ctx.rect((this.width - width) / 2, 0, width, this.height)
+    }
+    else if (formType == IMAGE_FORM) {
+        this.ctx.rect(0, 0, this.imgWidth, this.imgHeight)
+    }
+}
+
 StringArtGenerator.prototype.DrawGrayScale = function() {
     this.Clear(this.fakeCtx)
     this.fakeCtx.drawImage(this.image, this.imgX, this.imgY, this.imgWidth * this.imgScale, this.imgHeight * this.imgScale)
@@ -41,30 +66,9 @@ StringArtGenerator.prototype.DrawGrayScale = function() {
 
 StringArtGenerator.prototype.DrawLoadedImage = function() {
     this.Clear(this.ctx)
+
     this.ctx.save()
-    this.ctx.strokeStyle = BORDER_COLOR
-    this.ctx.beginPath()
-
-    let formType = this.formTypeBox.value
-
-    if (formType == CIRCLE_FORM) {
-        this.ctx.arc(this.x0, this.y0, this.radius + PADDING / 2, 0, Math.PI * 2)
-    }
-    else if (formType == RECT_FORM) {
-        this.ctx.rect(0, 0, this.width, this.height)
-    }
-    else if (formType == ALBUM_FORM) {
-        let height = this.width / Math.sqrt(2)
-        this.ctx.rect(0, (this.height - height) / 2, this.width, height)
-    }
-    else if (formType == PORTRAIT_FORM) {
-        let width = this.height / Math.sqrt(2)
-        this.ctx.rect((this.width - width) / 2, 0, width, this.height)
-    }
-    else if (formType == IMAGE_FORM) {
-        this.ctx.rect(0, 0, this.imgWidth, this.imgHeight)
-    }
-
+    this.DrawForm()
     this.ctx.clip()
     this.DrawGrayScale()
     this.ctx.stroke()

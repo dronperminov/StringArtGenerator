@@ -29,6 +29,7 @@ StringArtGenerator.prototype.LoadImage = function(image) {
 }
 
 StringArtGenerator.prototype.UpdateForm = function() {
+    this.InitBbox()
     this.DrawLoadedImage()
     this.InitArt()
 }
@@ -152,16 +153,18 @@ StringArtGenerator.prototype.ResetImage = function() {
 
     if (this.imgWidth > this.imgHeight) {
         this.imgWidth = this.width
-        this.imgHeight = this.width / aspectRatio
+        this.imgHeight = Math.round(this.width / aspectRatio)
     }
     else {
         this.imgHeight = this.height
-        this.imgWidth = this.imgHeight * aspectRatio
+        this.imgWidth = Math.round(this.imgHeight * aspectRatio)
     }
 
     this.imgX = 0
     this.imgY = 0
     this.imgScale = 1
+
+    this.InitBbox()
 }
 
 StringArtGenerator.prototype.Reset = function(needResetImage = true) {
