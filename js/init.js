@@ -116,25 +116,25 @@ StringArtGenerator.prototype.GetCircleNail = function(t) {
     return {x: x, y: y}
 }
 
-StringArtGenerator.prototype.GetRectNail = function(t, width, height) {
+StringArtGenerator.prototype.GetRectNail = function(t, x0, y0, width, height) {
     let half = Math.PI / 2
     let x, y
 
     if (t < half) {
-        x = this.x0 + width / 2
-        y = this.Interpolate(this.y0 - height / 2, this.y0 + height / 2, t / half)
+        x = x0 + width / 2
+        y = this.Interpolate(y0 - height / 2, y0 + height / 2, t / half)
     }
     else if (t < 2 * half) {
-        x = this.Interpolate(this.x0 - width / 2, this.x0 + width / 2, (t - half) / half)
-        y = this.y0 + height / 2
+        x = this.Interpolate(x0 - width / 2, x0 + width / 2, (t - half) / half)
+        y = y0 + height / 2
     }
     else if (t < 3*half) {
-        x = this.x0 - width / 2
-        y = this.Interpolate(this.y0 + height / 2, this.y0 - height / 2, (t - 2*half) / half)
+        x = x0 - width / 2
+        y = this.Interpolate(y0 + height / 2, y0 - height / 2, (t - 2*half) / half)
     }
     else {
-        x = this.Interpolate(this.x0 + width / 2, this.x0 - width / 2, (t - 3*half) / half)
-        y = this.y0 - height / 2
+        x = this.Interpolate(x0 + width / 2, x0 - width / 2, (t - 3*half) / half)
+        y = y0 - height / 2
     }
 
     return {x: x, y: y}
@@ -155,15 +155,20 @@ StringArtGenerator.prototype.InitNails = function() {
             nail = this.GetCircleNail(t)
         }
         else if (formType == RECT_FORM) {
-            nail = this.GetRectNail(t, this.width - 2*PADDING, this.height - 2*PADDING)
+            nail = this.GetRectNail(t, this.x0, this.y0, this.width - 2*PADDING, this.height - 2*PADDING)
         }
         else if (formType == ALBUM_FORM) {
             let size = this.width - 2*PADDING
-            nail = this.GetRectNail(t, size, size / Math.sqrt(2))
+            nail = this.GetRectNail(t, this.x0, this.y0, size, size / Math.sqrt(2))
         }
         else if (formType == PORTRAIT_FORM) {
             let size = this.height - 2*PADDING
-            nail = this.GetRectNail(t, size / Math.sqrt(2), size)
+            nail = this.GetRectNail(t, this.x0, this.y0, size / Math.sqrt(2), size)
+        }
+        else if (formType == IMAGE_FORM) {
+            let width = this.imgWidth - 2 * PADDING
+            let height = this.imgHeight - 2 * PADDING
+            nail = this.GetRectNail(t, this.imgWidth / 2, this.imgHeight / 2, width, height)
         }
 
         nail.x = Math.round(nail.x)

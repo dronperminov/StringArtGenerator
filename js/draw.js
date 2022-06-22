@@ -61,6 +61,9 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
         let width = this.height / Math.sqrt(2)
         this.ctx.rect((this.width - width) / 2, 0, width, this.height)
     }
+    else if (formType == IMAGE_FORM) {
+        this.ctx.rect(0, 0, this.imgWidth, this.imgHeight)
+    }
 
     this.ctx.clip()
     this.DrawGrayScale()
