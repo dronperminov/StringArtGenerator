@@ -176,11 +176,15 @@ StringArtGenerator.prototype.Reset = function(needResetImage = true) {
     for (let control of this.controls)
         control.removeAttribute('disabled')
 
-    this.generateBtn.removeAttribute('disabled')
     this.DrawLoadedImage()
 }
 
 StringArtGenerator.prototype.StartGenerate = function() {
+    this.isGenerating = !this.isGenerating
+
+    if (!this.isGenerating)
+        return
+
     this.saveBox.style.display = 'none'
     this.infoBox.innerHTML = ''
 
@@ -194,19 +198,17 @@ StringArtGenerator.prototype.StartGenerate = function() {
         this.DrawNails()
     }
 
-    this.isGenerating = true
-
     for (let control of this.controls)
         control.setAttribute('disabled', '')
 
-    this.generateBtn.setAttribute('disabled', '')
+    this.generateBtn.value = 'Прервать'
 }
 
 StringArtGenerator.prototype.EndGenerate = function() {
     this.saveBox.style.display = ''
     this.isGenerating = false
+    this.generateBtn.value = 'Запустить'
 
-    this.generateBtn.removeAttribute('disabled')
     this.resetBtn.removeAttribute('disabled')
     this.selectBtn.removeAttribute('disabled')
     this.linesCountBox.removeAttribute('disabled')
@@ -216,7 +218,7 @@ StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, tota
     this.sequence.push(nail)
     this.ShowInfo(linesCount, totalCount, startTime)
 
-    if (linesCount == 0) {
+    if (linesCount == 0 || !this.isGenerating) {
         this.EndGenerate()
         return
     }
