@@ -37,7 +37,7 @@ StringArtGenerator.prototype.InitControls = function() {
     this.controlsBox = document.getElementById('controls-box')
 
     this.formTypeBox = document.getElementById('form-type-box')
-    this.formTypeBox.addEventListener('change', () => this.DrawLoadedImage())
+    this.formTypeBox.addEventListener('change', () => this.UpdateForm())
 
     this.contrastBox = document.getElementById('contrast-box')
     this.contrastValue = document.getElementById('contrast-value')
@@ -50,6 +50,8 @@ StringArtGenerator.prototype.InitControls = function() {
     this.brightnessBox.addEventListener('change', () => this.DrawLoadedImage())
 
     this.nailsCountBox = document.getElementById('nails-count-box')
+    this.nailsCountBox.addEventListener('change', () => this.InitArt())
+
     this.linesCountBox = document.getElementById('lines-count-box')
     this.linesWeightBox = document.getElementById('lines-weight-box')
     this.infoBox = document.getElementById('info-box')
@@ -59,6 +61,8 @@ StringArtGenerator.prototype.InitControls = function() {
 
     this.resetBtn = document.getElementById('reset-btn')
     this.resetBtn.addEventListener('click', () => this.Reset(!this.isLineDrawing))
+
+    this.statusBox = document.getElementById('status-box')
 
     this.controls = [
         this.selectBtn,
@@ -194,20 +198,40 @@ StringArtGenerator.prototype.LineRasterization = function(x1, y1, x2, y2) {
     return line
 }
 
+StringArtGenerator.prototype.InitLinesAnimation = function(nail) {
+    if (nail >= this.nails.length) {
+        this.generateBtn.removeAttribute('disabled')
+        this.statusBox.innerHTML = ''
+        return
+    }
+
+    this.statusBox.innerHTML = `Инициализация линий (${nail + 1} / ${this.nails.length})`
+    this.generateBtn.setAttribute('disabled', '')
+
+    for (let i = 0; i < nail; i++) {
+        let x1 = this.nails[nail].x * this.dpr
+        let y1 = this.nails[nail].y * this.dpr
+
+        let x2 = this.nails[i].x * this.dpr
+        let y2 = this.nails[i].y * this.dpr
+
+        this.lines[nail][i] = this.LineRasterization(x1, y1, x2, y2)
+    }
+
+    window.requestAnimationFrame(() => this.InitLinesAnimation(nail + 1))
+}
+
 StringArtGenerator.prototype.InitLines = function() {
     this.lines = []
 
-    for (let i = 0; i < this.nails.length; i++) {
+    for (let i = 0; i < this.nails.length; i++)
         this.lines[i] = []
 
-        for (let j = 0; j < i; j++) {
-            let x1 = this.nails[i].x * this.dpr
-            let y1 = this.nails[i].y * this.dpr
+    this.InitLinesAnimation(0)
+}
 
-            let x2 = this.nails[j].x * this.dpr
-            let y2 = this.nails[j].y * this.dpr
-
-            this.lines[i][j] = this.LineRasterization(x1, y1, x2, y2)
-        }
-    }
+StringArtGenerator.prototype.InitArt = function() {
+    this.generateBtn.setAttribute('disabled', '')
+    this.InitNails()
+    this.InitLines()
 }

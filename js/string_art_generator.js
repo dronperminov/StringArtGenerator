@@ -4,6 +4,7 @@ function StringArtGenerator(canvas) {
     this.InitControls()
     this.InitSave()
     this.InitEvents()
+    this.InitArt()
 }
 
 StringArtGenerator.prototype.SelectImage = function(e) {
@@ -25,6 +26,11 @@ StringArtGenerator.prototype.LoadImage = function(image) {
     this.isLineDrawing = false
 
     this.Reset()
+}
+
+StringArtGenerator.prototype.UpdateForm = function() {
+    this.DrawLoadedImage()
+    this.InitArt()
 }
 
 StringArtGenerator.prototype.ToSignString = function(value) {
@@ -172,9 +178,6 @@ StringArtGenerator.prototype.StartGenerate = function() {
 
         this.pixels = this.GetPixels()
         this.isLineDrawing = true
-
-        this.InitNails()
-        this.InitLines()
         this.Clear(this.ctx)
         this.DrawNails()
     }
