@@ -31,9 +31,12 @@ StringArtGenerator.prototype.MouseDown = function(e) {
     this.isPressed = true
     this.prevX = e.offsetX
     this.prevY = e.offsetY
+    e.preventDefault()
 }
 
 StringArtGenerator.prototype.MouseMove = function(e) {
+    e.preventDefault()
+
     if (!this.isPressed || this.isGenerating || this.isLineDrawing)
         return
 
@@ -51,10 +54,13 @@ StringArtGenerator.prototype.MouseMove = function(e) {
 }
 
 StringArtGenerator.prototype.MouseUp = function(e) {
+    e.preventDefault()
     this.isPressed = false
 }
 
 StringArtGenerator.prototype.MouseWheel = function(e) {
+    e.preventDefault()
+
     if (this.isGenerating || this.isLineDrawing)
         return
 
