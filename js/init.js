@@ -116,24 +116,27 @@ StringArtGenerator.prototype.GetCircleNail = function(t) {
     return {x: x, y: y}
 }
 
-StringArtGenerator.prototype.GetRectNail = function(t, x0, y0, width, height) {
-    let half = Math.PI / 2
+StringArtGenerator.prototype.GetRectNail = function(angle, x0, y0, width, height) {
+    let t = angle / (2 * Math.PI)
+    let aspectRatio = width / height
+    let t1 = 0.5 / (1 + aspectRatio)
+    let ts = [0, t1, 0.5, 0.5 + t1, 1]
     let x, y
 
-    if (t < half) {
+    if (t < ts[1]) {
         x = x0 + width / 2
-        y = this.Interpolate(y0 - height / 2, y0 + height / 2, t / half)
+        y = this.Interpolate(y0 - height / 2, y0 + height / 2, (t - ts[0]) / (ts[1] - ts[0]))
     }
-    else if (t < 2 * half) {
-        x = this.Interpolate(x0 - width / 2, x0 + width / 2, (t - half) / half)
+    else if (t < ts[2]) {
+        x = this.Interpolate(x0 - width / 2, x0 + width / 2, (t - ts[1]) / (ts[2] - ts[1]))
         y = y0 + height / 2
     }
-    else if (t < 3*half) {
+    else if (t < ts[3]) {
         x = x0 - width / 2
-        y = this.Interpolate(y0 + height / 2, y0 - height / 2, (t - 2*half) / half)
+        y = this.Interpolate(y0 + height / 2, y0 - height / 2, (t - ts[2]) / (ts[3] - ts[2]))
     }
     else {
-        x = this.Interpolate(x0 + width / 2, x0 - width / 2, (t - 3*half) / half)
+        x = this.Interpolate(x0 + width / 2, x0 - width / 2, (t - ts[3]) / (ts[4] - ts[3]))
         y = y0 - height / 2
     }
 
