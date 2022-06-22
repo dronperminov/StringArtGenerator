@@ -1,6 +1,6 @@
-StringArtGenerator.prototype.Clear = function() {
-    this.ctx.fillStyle = BACKGROUND_COLOR
-    this.ctx.fillRect(0, 0, this.width, this.height)
+StringArtGenerator.prototype.Clear = function(ctx) {
+    ctx.fillStyle = BACKGROUND_COLOR
+    ctx.fillRect(0, 0, this.width, this.height)
 }
 
 StringArtGenerator.prototype.GetLightness = function(red, green, blue) {
@@ -18,7 +18,10 @@ StringArtGenerator.prototype.LimitPixel = function(value) {
 }
 
 StringArtGenerator.prototype.DrawGrayScale = function() {
-    let data = this.ctx.getImageData(0, 0, this.width * this.dpr, this.height * this.dpr)
+    this.Clear(this.fakeCtx)
+    this.fakeCtx.drawImage(this.image, this.imgX, this.imgY, this.imgWidth * this.imgScale, this.imgHeight * this.imgScale)
+
+    let data = this.fakeCtx.getImageData(0, 0, this.width * this.dpr, this.height * this.dpr)
     let pixels = data.data
 
     for (let i = 0; i < pixels.length; i += 4) {
@@ -37,7 +40,7 @@ StringArtGenerator.prototype.DrawGrayScale = function() {
 }
 
 StringArtGenerator.prototype.DrawLoadedImage = function() {
-    this.Clear()
+    this.Clear(this.ctx)
     this.ctx.save()
     this.ctx.strokeStyle = BORDER_COLOR
     this.ctx.beginPath()
@@ -60,12 +63,9 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
     }
 
     this.ctx.clip()
-    this.ctx.drawImage(this.image, this.imgX, this.imgY, this.imgWidth * this.imgScale, this.imgHeight * this.imgScale)
     this.DrawGrayScale()
     this.ctx.stroke()
     this.ctx.restore()
-
-    this.pixels = this.GetPixels()
 }
 
 StringArtGenerator.prototype.DrawNails = function() {

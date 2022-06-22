@@ -169,11 +169,12 @@ StringArtGenerator.prototype.StartGenerate = function() {
         this.sequence = []
         this.DrawLoadedImage()
 
+        this.pixels = this.GetPixels()
         this.isLineDrawing = true
 
         this.InitNails()
         this.InitLines()
-        this.Clear()
+        this.Clear(this.ctx)
         this.DrawNails()
     }
 

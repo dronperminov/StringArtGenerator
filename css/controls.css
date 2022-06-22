@@ -15,6 +15,7 @@
     border-bottom: 1px solid #808080;
     padding: 0;
     background: transparent;
+    color: #000;
 }
 
 .control-block input[type="text"]:disabled,
@@ -22,6 +23,7 @@
 .control-block input[type="range"]:disabled,
 .control-block select:disabled {
     color: #aaa;
+    border-color: #aaa;
     pointer-events: none;
 }
 
