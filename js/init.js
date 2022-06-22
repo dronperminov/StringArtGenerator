@@ -94,6 +94,11 @@ StringArtGenerator.prototype.InitEvents = function() {
     this.canvas.addEventListener('mouseleave', (e) => this.MouseUp(e))
     this.canvas.addEventListener('mousewheel', (e) => this.MouseWheel(e))
 
+    this.touches = []
+    this.canvas.addEventListener('touchstart', (e) => { this.TouchStart(e) })
+    this.canvas.addEventListener('touchmove', (e) => { this.TouchMove(e) })
+    this.canvas.addEventListener('touchend', (e) => { this.TouchEnd(e) })
+
     let generator = document.getElementById('generator-box')
     generator.addEventListener('dragover', (e) => this.DragOver(e))
     generator.addEventListener('dragleave', (e) => this.DragLeave(e))
@@ -215,7 +220,9 @@ StringArtGenerator.prototype.InitLinesAnimation = function(nail) {
         let x2 = this.nails[i].x * this.dpr
         let y2 = this.nails[i].y * this.dpr
 
-        this.lines[nail][i] = this.LineRasterization(x1, y1, x2, y2)
+        let line = this.LineRasterization(x1, y1, x2, y2)
+        this.lines[nail][i] = line
+        this.lines[i][nail] = line
     }
 
     window.requestAnimationFrame(() => this.InitLinesAnimation(nail + 1))

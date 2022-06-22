@@ -27,6 +27,21 @@ StringArtGenerator.prototype.NormalizePoint = function() {
     }
 }
 
+StringArtGenerator.prototype.TouchToPoint = function(touch) {
+    return { x: Math.round(touch.clientX), y: Math.round(touch.clientY) }
+}
+
+StringArtGenerator.prototype.GetPointDistance = function(p1, p2) {
+    let dx = p2.x - p1.x
+    let dy = p2.y - p1.y
+
+    return Math.sqrt(dx*dx + dy*dy)
+}
+
+StringArtGenerator.prototype.MaxAbs = function(a, b) {
+    return Math.abs(a) > Math.abs(b) ? a : b
+}
+
 StringArtGenerator.prototype.MouseDown = function(e) {
     this.isPressed = true
     this.prevX = e.offsetX
@@ -64,14 +79,10 @@ StringArtGenerator.prototype.MouseWheel = function(e) {
     if (this.isGenerating || this.isLineDrawing)
         return
 
-    let dx = (e.offsetX - this.imgX) / this.imgScale
-    let dy = (e.offsetY - this.imgY) / this.imgScale
     let scaleIndex = SCALES.indexOf(this.imgScale) - Math.sign(e.deltaY)
+    let scale = SCALES[Math.max(0, Math.min(SCALES.length - 1, scaleIndex))]
 
-    this.imgScale = SCALES[Math.max(0, Math.min(SCALES.length - 1, scaleIndex))]
-    this.imgX = e.offsetX - dx * this.imgScale
-    this.imgY = e.offsetY - dy * this.imgScale
-
+    this.SetScale(scale, e.offsetX, e.offsetY)
     this.NormalizePoint()
     this.DrawLoadedImage()
 }
@@ -98,4 +109,69 @@ StringArtGenerator.prototype.Drop = function(e) {
     let image = new Image()
     image.onload = () => this.LoadImage(image)
     image.src = URL.createObjectURL(e.dataTransfer.files[0])
+}
+
+StringArtGenerator.prototype.TouchStart = function(e) {
+    e.preventDefault()
+    this.touches = []
+
+    if (e.targetTouches.length == 1) {
+        let point = this.TouchToPoint(e.targetTouches[0])
+        e.offsetX = point.x
+        e.offsetY = point.y
+        this.MouseDown(e)
+    }
+    else if (e.targetTouches.length == 2) {
+        this.touches.push(this.TouchToPoint(e.targetTouches[0]))
+        this.touches.push(this.TouchToPoint(e.targetTouches[1]))
+    }
+}
+
+StringArtGenerator.prototype.TouchMove = function(e) {
+    if (!this.isPressed || this.isGenerating || this.isLineDrawing)
+        return
+
+    e.preventDefault()
+
+    if (e.targetTouches.length == 1) {
+        let point = this.TouchToPoint(e.targetTouches[0])
+        e.offsetX = point.x
+        e.offsetY = point.y
+        this.MouseMove(e)
+        return
+    }
+
+    if (e.targetTouches.length != 2)
+        return
+
+    let p1 = this.TouchToPoint(e.targetTouches[0])
+    let p2 = this.TouchToPoint(e.targetTouches[1])
+
+    let dst1 = this.GetPointDistance(this.touches[0], this.touches[1])
+    let dst2 = this.GetPointDistance(p1, p2)
+
+    if (Math.abs(dst2 - dst1) > TOUCH_DELTA)
+        this.SetScale(this.imgScale * dst2 / dst1, (p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
+
+    let dx1 = p1.x - this.touches[0].x
+    let dx2 = p2.x - this.touches[1].x
+
+    if (Math.sign(dx1) == Math.sign(dx2))
+        this.imgX += this.MaxAbs(dx1, dx2)
+
+    let dy1 = p1.y - this.touches[0].y
+    let dy2 = p2.y - this.touches[1].y
+
+    if (Math.sign(dy1) == Math.sign(dy2))
+        this.imgY += this.MaxAbs(dy1, dy2)
+
+    this.touches = [p1, p2]
+
+    this.NormalizePoint()
+    this.DrawLoadedImage()
+}
+
+StringArtGenerator.prototype.TouchEnd = function(e) {
+    e.preventDefault()
+    this.isPressed = false
 }

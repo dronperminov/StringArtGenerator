@@ -76,18 +76,17 @@ StringArtGenerator.prototype.GetPixels = function() {
 }
 
 StringArtGenerator.prototype.GetLineLightness = function(i, j) {
-    let line = i < j ? this.lines[j][i] : this.lines[i][j]
     let lightness = 0
 
-    for (let index of line)
+    for (let index of this.lines[i][j])
         lightness += this.pixels[index]
 
-    return lightness / line.size
+    return lightness / this.lines[i][j].size
 }
 
 StringArtGenerator.prototype.GetNextNail = function(nail) {
     let nextNail = nail
-    let maxLightness = Infinity
+    let minLightness = Infinity
 
     for (let i = 0; i < this.nails.length; i++) {
         if (i == nail)
@@ -95,8 +94,8 @@ StringArtGenerator.prototype.GetNextNail = function(nail) {
 
         let lightness = this.GetLineLightness(nail, i)
 
-        if (lightness < maxLightness) {
-            maxLightness = lightness
+        if (lightness < minLightness) {
+            minLightness = lightness
             nextNail = i
         }
     }
@@ -105,9 +104,7 @@ StringArtGenerator.prototype.GetNextNail = function(nail) {
 }
 
 StringArtGenerator.prototype.RemoveLine = function(i, j, lineWeight) {
-    let line = i < j ? this.lines[j][i] : this.lines[i][j]
-
-    for (let index of line)
+    for (let index of this.lines[i][j])
         this.pixels[index] = Math.min(255, this.pixels[index] + lineWeight * this.dpr)
 }
 
@@ -131,6 +128,21 @@ StringArtGenerator.prototype.ShowInfo = function(linesCount, totalCount, startTi
     this.infoBox.innerHTML += `<b>Прошло времени:</b> ${time}<br>`
     this.infoBox.innerHTML += `<b>Осталось времени:</b> ${lost}<br>`
     this.infoBox.innerHTML += `<b>Ср. время линии:</b> ${avg} мс`
+}
+
+StringArtGenerator.prototype.GetActions = function() {
+    let actions = '<b>Основные действия:</b><br>'
+
+    if ('ontouchstart' in window) {
+        actions += '<b>Масштабирование</b> - щипок<br>'
+        actions += '<b>Перемещение</b> - касание'
+    }
+    else {
+        actions += '<b>Масштабирование</b> - скроллинг<br>'
+        actions += '<b>Перемещение</b> - левая кнопка мыши'
+    }
+
+    return actions
 }
 
 StringArtGenerator.prototype.ResetImage = function() {
@@ -157,7 +169,7 @@ StringArtGenerator.prototype.Reset = function(needResetImage = true) {
         this.ResetImage()
 
     this.saveBox.style.display = 'none'
-    this.infoBox.innerHTML = '<b>Основные действия:</b><br><b>Масштабирование</b> - скроллинг<br><b>Перемещение</b> - левая кнопка мыши'
+    this.infoBox.innerHTML = this.GetActions()
     this.isGenerating = false
     this.isLineDrawing = false
 
@@ -264,4 +276,13 @@ StringArtGenerator.prototype.Save = function() {
     }
 
     link.click()
+}
+
+StringArtGenerator.prototype.SetScale = function(scale, x, y) {
+    let dx = (x - this.imgX) / this.imgScale
+    let dy = (y - this.imgY) / this.imgScale
+
+    this.imgScale = scale
+    this.imgX = x - dx * this.imgScale
+    this.imgY = y - dy * this.imgScale
 }

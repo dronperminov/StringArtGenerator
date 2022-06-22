@@ -5,6 +5,8 @@ const BORDER_COLOR = '#000'
 const NAIL_COLOR = '#000'
 const PADDING = 5
 
+const TOUCH_DELTA = 5
+
 const CIRCLE_FORM = 'circle'
 const RECT_FORM = 'rect'
 const ALBUM_FORM = 'album'
