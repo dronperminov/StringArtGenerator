@@ -64,6 +64,8 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
     this.DrawGrayScale()
     this.ctx.stroke()
     this.ctx.restore()
+
+    this.pixels = this.GetPixels()
 }
 
 StringArtGenerator.prototype.DrawNails = function() {

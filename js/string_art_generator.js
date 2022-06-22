@@ -68,17 +68,17 @@ StringArtGenerator.prototype.GetPixels = function() {
     return pixels
 }
 
-StringArtGenerator.prototype.GetLineLightness = function(i, j, pixels) {
+StringArtGenerator.prototype.GetLineLightness = function(i, j) {
     let line = i < j ? this.lines[j][i] : this.lines[i][j]
     let lightness = 0
 
     for (let index of line)
-        lightness += pixels[index]
+        lightness += this.pixels[index]
 
     return lightness / line.size
 }
 
-StringArtGenerator.prototype.GetNextNail = function(nail, pixels) {
+StringArtGenerator.prototype.GetNextNail = function(nail) {
     let nextNail = nail
     let maxLightness = Infinity
 
@@ -86,7 +86,7 @@ StringArtGenerator.prototype.GetNextNail = function(nail, pixels) {
         if (i == nail)
             continue
 
-        let lightness = this.GetLineLightness(nail, i, pixels)
+        let lightness = this.GetLineLightness(nail, i)
 
         if (lightness < maxLightness) {
             maxLightness = lightness
@@ -97,11 +97,11 @@ StringArtGenerator.prototype.GetNextNail = function(nail, pixels) {
     return nextNail
 }
 
-StringArtGenerator.prototype.RemoveLine = function(i, j, pixels, lineWeight) {
+StringArtGenerator.prototype.RemoveLine = function(i, j, lineWeight) {
     let line = i < j ? this.lines[j][i] : this.lines[i][j]
 
     for (let index of line)
-        pixels[index] = Math.min(255, pixels[index] + lineWeight * this.dpr)
+        this.pixels[index] = Math.min(255, this.pixels[index] + lineWeight * this.dpr)
 }
 
 StringArtGenerator.prototype.TimeToString = function(delta) {
@@ -114,16 +114,16 @@ StringArtGenerator.prototype.TimeToString = function(delta) {
     return `${minutes}:${seconds}.${milliseconds}`
 }
 
-StringArtGenerator.prototype.ShowInfo = function(linesCount, startTime) {
+StringArtGenerator.prototype.ShowInfo = function(linesCount, totalCount, startTime) {
     let currTime = performance.now()
     let time = this.TimeToString(currTime - startTime)
-    let lost = this.TimeToString((currTime - startTime) / this.sequence.length * linesCount)
-    let avg = this.TimeToString((currTime - startTime) / this.sequence.length)
+    let lost = this.TimeToString((currTime - startTime) / (totalCount - linesCount) * linesCount)
+    let avg = ((currTime - startTime) / (totalCount - linesCount)).toFixed(2)
 
     this.infoBox.innerHTML = `<b>Осталось линий:</b> ${linesCount}<br>`
     this.infoBox.innerHTML += `<b>Прошло времени:</b> ${time}<br>`
     this.infoBox.innerHTML += `<b>Осталось времени:</b> ${lost}<br>`
-    this.infoBox.innerHTML += `<b>Ср. время линии:</b> ${avg}`
+    this.infoBox.innerHTML += `<b>Ср. время линии:</b> ${avg} мс`
 }
 
 StringArtGenerator.prototype.ResetImage = function() {
@@ -158,18 +158,25 @@ StringArtGenerator.prototype.Reset = function(needResetImage = true) {
         control.removeAttribute('disabled')
 
     this.generateBtn.removeAttribute('disabled')
-
     this.DrawLoadedImage()
 }
 
 StringArtGenerator.prototype.StartGenerate = function() {
     this.saveBox.style.display = 'none'
     this.infoBox.innerHTML = ''
-    this.sequence = []
 
-    this.DrawLoadedImage()
+    if (!this.isLineDrawing) {
+        this.sequence = []
+        this.DrawLoadedImage()
 
-    this.isLineDrawing = true
+        this.isLineDrawing = true
+
+        this.InitNails()
+        this.InitLines()
+        this.Clear()
+        this.DrawNails()
+    }
+
     this.isGenerating = true
 
     for (let control of this.controls)
@@ -182,24 +189,26 @@ StringArtGenerator.prototype.EndGenerate = function() {
     this.saveBox.style.display = ''
     this.isGenerating = false
 
+    this.generateBtn.removeAttribute('disabled')
     this.resetBtn.removeAttribute('disabled')
     this.selectBtn.removeAttribute('disabled')
+    this.linesCountBox.removeAttribute('disabled')
 }
 
-StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, pixels, lineWeight, startTime) {
+StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, totalCount, lineWeight, startTime) {
     this.sequence.push(nail)
-    this.ShowInfo(linesCount, startTime)
+    this.ShowInfo(linesCount, totalCount, startTime)
 
     if (linesCount == 0) {
         this.EndGenerate()
         return
     }
 
-    let nextNail = this.GetNextNail(nail, pixels)
-    this.RemoveLine(nail, nextNail, pixels, lineWeight)
+    let nextNail = this.GetNextNail(nail)
+    this.RemoveLine(nail, nextNail, lineWeight)
     this.DrawLine(this.nails[nail], this.nails[nextNail], lineWeight)
 
-    window.requestAnimationFrame(() => this.GenerateIteration(nextNail, linesCount - 1, pixels, lineWeight, startTime))
+    window.requestAnimationFrame(() => this.GenerateIteration(nextNail, linesCount - 1, totalCount, lineWeight, startTime))
 }
 
 StringArtGenerator.prototype.Generate = function() {
@@ -207,15 +216,9 @@ StringArtGenerator.prototype.Generate = function() {
 
     let linesCount = +this.linesCountBox.value
     let lineWeight = +this.linesWeightBox.value
-    let pixels = this.GetPixels()
     let startTime = performance.now()
 
-    this.InitNails()
-    this.InitLines()
-    this.Clear()
-    this.DrawNails()
-
-    this.GenerateIteration(0, linesCount, pixels, lineWeight, startTime)
+    this.GenerateIteration(0, linesCount, linesCount, lineWeight, startTime)
 }
 
 StringArtGenerator.prototype.ToSVG = function() {
