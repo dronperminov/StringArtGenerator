@@ -17,16 +17,6 @@ StringArtGenerator.prototype.InitCanvas = function(canvas) {
     this.fakeCtx = this.fakeCanvas.getContext('2d')
     this.fakeCtx.scale(this.dpr, this.dpr)
 
-    this.canvas.addEventListener('mousedown', (e) => this.MouseDown(e))
-    this.canvas.addEventListener('mousemove', (e) => this.MouseMove(e))
-    this.canvas.addEventListener('mouseup', (e) => this.MouseUp(e))
-    this.canvas.addEventListener('mouseleave', (e) => this.MouseUp(e))
-    this.canvas.addEventListener('mousewheel', (e) => this.MouseWheel(e))
-
-    this.canvas.addEventListener('dragover', (e) => this.DragOver(e))
-    this.canvas.addEventListener('dragleave', (e) => this.DragLeave(e))
-    this.canvas.addEventListener('drop', (e) => this.Drop(e))
-
     this.x0 = this.width / 2
     this.y0 = this.height / 2
     this.radius = Math.min(this.width, this.height) / 2 - PADDING
@@ -91,6 +81,19 @@ StringArtGenerator.prototype.InitSave = function() {
     this.saveTypeBox = document.getElementById('save-type-box')
     this.saveBtn = document.getElementById('save-btn')
     this.saveBtn.addEventListener('click', () => this.Save())
+}
+
+StringArtGenerator.prototype.InitEvents = function() {
+    this.canvas.addEventListener('mousedown', (e) => this.MouseDown(e))
+    this.canvas.addEventListener('mousemove', (e) => this.MouseMove(e))
+    this.canvas.addEventListener('mouseup', (e) => this.MouseUp(e))
+    this.canvas.addEventListener('mouseleave', (e) => this.MouseUp(e))
+    this.canvas.addEventListener('mousewheel', (e) => this.MouseWheel(e))
+
+    let generator = document.getElementById('generator-box')
+    generator.addEventListener('dragover', (e) => this.DragOver(e))
+    generator.addEventListener('dragleave', (e) => this.DragLeave(e))
+    generator.addEventListener('drop', (e) => this.Drop(e))
 }
 
 StringArtGenerator.prototype.Interpolate = function(a, b, t) {

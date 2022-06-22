@@ -3,6 +3,7 @@ function StringArtGenerator(canvas) {
     this.InitSelectButton()
     this.InitControls()
     this.InitSave()
+    this.InitEvents()
 }
 
 StringArtGenerator.prototype.SelectImage = function(e) {
