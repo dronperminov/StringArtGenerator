@@ -85,9 +85,9 @@ StringArtGenerator.prototype.DrawNails = function() {
     }
 }
 
-StringArtGenerator.prototype.DrawLine = function(nail1, nail2, lineWeight) {
+StringArtGenerator.prototype.DrawLine = function(nail1, nail2, lineWeight, lineColor) {
     this.ctx.lineWidth = 1
-    this.ctx.strokeStyle = `rgba(0, 0, 0, ${lineWeight / 255})`
+    this.ctx.strokeStyle = lineColor
     this.ctx.beginPath()
     this.ctx.moveTo(nail1.x, nail1.y)
     this.ctx.lineTo(nail2.x, nail2.y)

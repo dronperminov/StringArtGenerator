@@ -146,6 +146,13 @@ StringArtGenerator.prototype.GetActions = function() {
     return actions
 }
 
+StringArtGenerator.prototype.GetLineColor = function() {
+    let color = this.linesColorBox.value
+    let weight = +this.linesWeightBox.value
+
+    return `${color}${this.LimitPixel(weight).toString(16).padStart(2, '0')}`
+}
+
 StringArtGenerator.prototype.ResetImage = function() {
     this.imgWidth = this.image.width
     this.imgHeight = this.image.height
@@ -217,7 +224,7 @@ StringArtGenerator.prototype.EndGenerate = function() {
     this.linesCountBox.removeAttribute('disabled')
 }
 
-StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, totalCount, lineWeight, startTime) {
+StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, totalCount, lineWeight, lineColor, startTime) {
     this.sequence.push(nail)
     this.ShowInfo(linesCount, totalCount, startTime)
 
@@ -228,9 +235,9 @@ StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, tota
 
     let nextNail = this.GetNextNail(nail)
     this.RemoveLine(nail, nextNail, lineWeight)
-    this.DrawLine(this.nails[nail], this.nails[nextNail], lineWeight)
+    this.DrawLine(this.nails[nail], this.nails[nextNail], lineWeight, lineColor)
 
-    window.requestAnimationFrame(() => this.GenerateIteration(nextNail, linesCount - 1, totalCount, lineWeight, startTime))
+    window.requestAnimationFrame(() => this.GenerateIteration(nextNail, linesCount - 1, totalCount, lineWeight, lineColor, startTime))
 }
 
 StringArtGenerator.prototype.Generate = function() {
@@ -238,9 +245,18 @@ StringArtGenerator.prototype.Generate = function() {
 
     let linesCount = +this.linesCountBox.value
     let lineWeight = +this.linesWeightBox.value
+    let lineColor = this.GetLineColor()
     let startTime = performance.now()
 
-    this.GenerateIteration(0, linesCount, linesCount, lineWeight, startTime)
+    this.GenerateIteration(0, linesCount, linesCount, lineWeight, lineColor, startTime)
+}
+
+StringArtGenerator.prototype.ToStringArt = function() {
+    return JSON.stringify({
+        'nails': this.nails.length,
+        'color': this.GetLineColor(),
+        'sequence': this.sequence
+    })
 }
 
 StringArtGenerator.prototype.ToSVG = function() {
@@ -254,7 +270,7 @@ StringArtGenerator.prototype.ToSVG = function() {
         let p1 = this.nails[this.sequence[i - 1]]
         let p2 = this.nails[this.sequence[i]]
 
-        svg += `    <path d="M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}" line-width="1" stroke="rgba(0, 0, 0, ${lineWeight / 255})" fill="none" />\n`
+        svg += `    <path d="M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}" line-width="1" stroke="${this.GetLineColor()}" fill="none" />\n`
     }
 
     svg += '</svg>'
@@ -267,8 +283,7 @@ StringArtGenerator.prototype.Save = function() {
     let link = document.createElement("a")
 
     if (type == 'stringart') {
-        content = `${this.nails.length}\n${this.sequence.join(',')}`
-        link.href = URL.createObjectURL(new Blob([content], { type: 'text/plain' }))
+        link.href = URL.createObjectURL(new Blob([this.ToStringArt()], { type: 'application/json' }))
         link.download = 'art.stringart'
     }
     else if (type == 'png') {

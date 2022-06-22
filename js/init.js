@@ -54,6 +54,7 @@ StringArtGenerator.prototype.InitControls = function() {
 
     this.linesCountBox = document.getElementById('lines-count-box')
     this.linesWeightBox = document.getElementById('lines-weight-box')
+    this.linesColorBox = document.getElementById('lines-color-box')
     this.infoBox = document.getElementById('info-box')
 
     this.generateBtn = document.getElementById('generate-btn')
@@ -72,6 +73,7 @@ StringArtGenerator.prototype.InitControls = function() {
         this.nailsCountBox,
         this.linesCountBox,
         this.linesWeightBox,
+        this.linesColorBox,
         this.resetBtn
     ]
 
