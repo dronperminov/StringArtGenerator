@@ -115,6 +115,7 @@ StringArtGenerator.prototype.InitEvents = function() {
     this.canvas.addEventListener('mouseup', (e) => this.MouseUp(e))
     this.canvas.addEventListener('mouseleave', (e) => this.MouseUp(e))
     this.canvas.addEventListener('mousewheel', (e) => this.MouseWheel(e))
+    this.canvas.addEventListener('wheel', (e) => this.MouseWheel(e))
 
     this.touches = []
     this.canvas.addEventListener('touchstart', (e) => { this.TouchStart(e) })
