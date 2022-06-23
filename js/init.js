@@ -57,6 +57,9 @@ StringArtGenerator.prototype.InitControls = function() {
     this.brightnessBox.addEventListener('input', () => this.UpdateBrightness())
     this.brightnessBox.addEventListener('change', () => { this.UpdateBrightness(); this.DrawLoadedImage() })
 
+    this.nailsModeBox = document.getElementById('nails-mode-box')
+    this.nailsModeBox.addEventListener('change', () => this.InitArt())
+
     this.nailsCountBox = document.getElementById('nails-count-box')
     this.nailsCountBox.addEventListener('change', () => this.InitArt())
 
@@ -89,6 +92,7 @@ StringArtGenerator.prototype.InitControls = function() {
         this.contrastBox,
         this.brightnessBox,
         this.formTypeBox,
+        this.nailsModeBox,
         this.nailsCountBox,
         this.linesCountBox,
         this.linesWeightBox,
@@ -166,11 +170,9 @@ StringArtGenerator.prototype.GetRectNail = function(angle, x0, y0, width, height
     return {x: x, y: y}
 }
 
-StringArtGenerator.prototype.InitNails = function() {
-    this.nails = []
-
-    let nailsCount = +this.nailsCountBox.value
+StringArtGenerator.prototype.InitBorderNails = function(nailsCount) {
     let angle = 2 * Math.PI / nailsCount
+    let nails = []
 
     for (let i = 0; i < nailsCount; i++) {
         let nail = {x: 0, y: 0}
@@ -199,7 +201,89 @@ StringArtGenerator.prototype.InitNails = function() {
         nail.x = Math.round(nail.x)
         nail.y = Math.round(nail.y)
 
-        this.nails.push(nail)
+        nails.push(nail)
+    }
+
+    return nails
+}
+
+StringArtGenerator.prototype.InitGridNails = function(nailsCount) {
+    let nails = []
+    let width = this.imgBbox.xmax - this.imgBbox.xmin
+    let height = this.imgBbox.ymax - this.imgBbox.ymin
+    let aspectRatio = width / height
+
+
+    let scale = this.formType == CIRCLE_FORM ? 2 / Math.sqrt(Math.PI) : 1
+    let wc = Math.round(Math.sqrt(nailsCount * aspectRatio * scale))
+    let hc = Math.round(Math.sqrt(nailsCount / aspectRatio * scale) * scale)
+
+    let x0 = (this.imgBbox.xmin + this.imgBbox.xmax) / 2
+    let y0 = (this.imgBbox.ymin + this.imgBbox.ymax) / 2
+
+    for (let i = 0; i < hc; i++) {
+        for (let j = 0; j < wc; j++) {
+            let x = this.Interpolate(this.imgBbox.xmin + PADDING, this.imgBbox.xmax - PADDING, j / (wc - 1))
+            let y = this.Interpolate(this.imgBbox.ymin + PADDING, this.imgBbox.ymax - PADDING, i / (hc - 1))
+
+            if (this.formType == CIRCLE_FORM) {
+                let dx = x - x0
+                let dy = y - y0
+
+                if (dx * dx + dy * dy > this.radius * this.radius)
+                    continue
+            }
+
+            nails.push({
+                x: Math.round(x),
+                y: Math.round(y)
+            })
+        }
+    }
+
+    return nails
+}
+
+StringArtGenerator.prototype.InitGridRandom = function(nailsCount) {
+    let nails = []
+
+    for (let i = 0; i < nailsCount; i++) {
+        let x, y
+
+        if (this.formType == CIRCLE_FORM) {
+            let t = Math.random() * 2 * Math.PI
+            let radius = this.radius * Math.sqrt(Math.random())
+
+            x = (this.imgBbox.xmin + this.imgBbox.xmax) / 2 + radius * Math.cos(t)
+            y = (this.imgBbox.ymin + this.imgBbox.ymax) / 2 + radius * Math.sin(t)
+        }
+        else {
+            x = this.imgBbox.xmin + Math.random() * (this.imgBbox.xmax - this.imgBbox.xmin)
+            y = this.imgBbox.ymin + Math.random() * (this.imgBbox.ymax - this.imgBbox.ymin)
+        }
+
+        nails.push({
+            x: Math.round(x),
+            y: Math.round(y)
+        })
+    }
+
+    return nails
+}
+
+StringArtGenerator.prototype.InitNails = function() {
+    let nailsMode =this.nailsModeBox.value
+    let nailsCount = +this.nailsCountBox.value
+    this.nails = []
+
+    if (nailsMode == BORDER_MODE) {
+        this.nails = this.InitBorderNails(nailsCount)
+    }
+    else if (nailsMode == GRID_MODE) {
+        this.nails = this.InitGridNails(nailsCount)
+    }
+    else if (nailsMode == RANDOM_MODE) {
+        this.nails = this.InitGridRandom(nailsCount)
     }
 }
 
@@ -240,7 +324,7 @@ StringArtGenerator.prototype.InitLinesAnimation = function(nail) {
         return
     }
 
-    this.statusBox.innerHTML = `Инициализация линий (${nail + 1} / ${this.nails.length})`
+    this.statusBox.innerHTML = `Инициализация линий (${((nail + 1) / this.nails.length * 100).toFixed(2)}%)`
     this.generateBtn.setAttribute('disabled', '')
 
     for (let i = 0; i < nail; i++) {
