@@ -27,8 +27,10 @@ StringArtGenerator.prototype.LoadImage = function(image) {
 
     if (this.formType === undefined || this.formType == IMAGE_FORM) {
         this.formType = this.formTypeBox.value
-        this.InitArt()
+        this.InitNails()
     }
+
+    this.generateBtn.removeAttribute('disabled')
 }
 
 StringArtGenerator.prototype.UpdateForm = function() {
@@ -39,7 +41,7 @@ StringArtGenerator.prototype.UpdateForm = function() {
     this.DrawLoadedImage()
 
     if (needInitArt)
-        this.InitArt()
+        this.InitNails()
 }
 
 StringArtGenerator.prototype.ToSignString = function(value) {
@@ -90,36 +92,42 @@ StringArtGenerator.prototype.GetPixels = function() {
     return pixels
 }
 
-StringArtGenerator.prototype.GetLineLightness = function(i, j) {
+StringArtGenerator.prototype.GetLineLightness = function(line) {
     let lightness = 0
 
-    for (let index of this.lines[i][j])
+    for (let index of line)
         lightness += this.pixels[index]
 
-    return lightness / this.lines[i][j].size
+    return lightness / line.size
 }
 
 StringArtGenerator.prototype.GetNextNail = function(nail) {
     let nextNail = nail
+    let nextLine = null
     let minLightness = Infinity
 
     for (let i = 0; i < this.nails.length; i++) {
         if (i == nail)
             continue
 
-        let lightness = this.GetLineLightness(nail, i)
+        let line = this.LineRasterization(this.nails[i].x, this.nails[i].y, this.nails[nail].x, this.nails[nail].y)
+        let lightness = this.GetLineLightness(line)
 
         if (lightness < minLightness) {
             minLightness = lightness
             nextNail = i
+            nextLine = line
         }
     }
 
-    return nextNail
+    return {
+        nail: nextNail,
+        line: nextLine
+    }
 }
 
-StringArtGenerator.prototype.RemoveLine = function(i, j, lineWeight) {
-    for (let index of this.lines[i][j])
+StringArtGenerator.prototype.RemoveLine = function(line, lineWeight) {
+    for (let index of line)
         this.pixels[index] = Math.min(255, this.pixels[index] + lineWeight * this.dpr)
 }
 
@@ -251,11 +259,11 @@ StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, tota
         return
     }
 
-    let nextNail = this.GetNextNail(nail)
-    this.RemoveLine(nail, nextNail, lineWeight)
-    this.DrawLine(this.nails[nail], this.nails[nextNail], lineColor)
+    let next = this.GetNextNail(nail)
+    this.RemoveLine(next.line, lineWeight)
+    this.DrawLine(this.nails[nail], this.nails[next.nail], lineColor)
 
-    window.requestAnimationFrame(() => this.GenerateIteration(nextNail, linesCount - 1, totalCount, lineWeight, lineColor, startTime))
+    window.requestAnimationFrame(() => this.GenerateIteration(next.nail, linesCount - 1, totalCount, lineWeight, lineColor, startTime))
 }
 
 StringArtGenerator.prototype.Generate = function() {

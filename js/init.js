@@ -58,10 +58,10 @@ StringArtGenerator.prototype.InitControls = function() {
     this.brightnessBox.addEventListener('change', () => { this.UpdateBrightness(); this.DrawLoadedImage() })
 
     this.nailsModeBox = document.getElementById('nails-mode-box')
-    this.nailsModeBox.addEventListener('change', () => this.InitArt())
+    this.nailsModeBox.addEventListener('change', () => this.InitNails())
 
     this.nailsCountBox = document.getElementById('nails-count-box')
-    this.nailsCountBox.addEventListener('change', () => this.InitArt())
+    this.nailsCountBox.addEventListener('change', () => this.InitNails())
 
     this.linesCountBox = document.getElementById('lines-count-box')
 
@@ -315,46 +315,6 @@ StringArtGenerator.prototype.LineRasterization = function(x1, y1, x2, y2) {
 
     line.add(y2 * this.width + x2)
     return line
-}
-
-StringArtGenerator.prototype.InitLinesAnimation = function(nail) {
-    if (nail >= this.nails.length) {
-        this.generateBtn.removeAttribute('disabled')
-        this.statusBox.innerHTML = ''
-        return
-    }
-
-    this.statusBox.innerHTML = `Инициализация линий (${((nail + 1) / this.nails.length * 100).toFixed(2)}%)`
-    this.generateBtn.setAttribute('disabled', '')
-
-    for (let i = 0; i < nail; i++) {
-        let x1 = this.nails[nail].x
-        let y1 = this.nails[nail].y
-
-        let x2 = this.nails[i].x
-        let y2 = this.nails[i].y
-
-        let line = this.LineRasterization(x1, y1, x2, y2)
-        this.lines[nail][i] = line
-        this.lines[i][nail] = line
-    }
-
-    window.requestAnimationFrame(() => this.InitLinesAnimation(nail + 1))
-}
-
-StringArtGenerator.prototype.InitLines = function() {
-    this.lines = []
-
-    for (let i = 0; i < this.nails.length; i++)
-        this.lines[i] = []
-
-    this.InitLinesAnimation(0)
-}
-
-StringArtGenerator.prototype.InitArt = function() {
-    this.generateBtn.setAttribute('disabled', '')
-    this.InitNails()
-    this.InitLines()
 }
 
 StringArtGenerator.prototype.InitBbox = function() {
