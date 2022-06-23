@@ -25,7 +25,7 @@ StringArtGenerator.prototype.LoadImage = function(image) {
 
     this.Reset()
 
-    if (this.formType === undefined) {
+    if (this.formType === undefined || this.formType == IMAGE_FORM) {
         this.formType = this.formTypeBox.value
         this.InitArt()
     }
