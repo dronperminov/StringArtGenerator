@@ -4,7 +4,6 @@ function StringArtGenerator(canvas) {
     this.InitControls()
     this.InitSave()
     this.InitEvents()
-    this.InitArt()
 }
 
 StringArtGenerator.prototype.SelectImage = function(e) {
@@ -22,16 +21,25 @@ StringArtGenerator.prototype.SelectImage = function(e) {
 
 StringArtGenerator.prototype.LoadImage = function(image) {
     this.image = image
-    this.controlsBox.style.display = ''
     this.isLineDrawing = false
 
     this.Reset()
+
+    if (this.formType === undefined) {
+        this.formType = this.formTypeBox.value
+        this.InitArt()
+    }
 }
 
 StringArtGenerator.prototype.UpdateForm = function() {
+    let needInitArt = this.formType != this.formTypeBox.value
+    this.formType = this.formTypeBox.value
+
     this.InitBbox()
     this.DrawLoadedImage()
-    this.InitArt()
+
+    if (needInitArt)
+        this.InitArt()
 }
 
 StringArtGenerator.prototype.ToSignString = function(value) {

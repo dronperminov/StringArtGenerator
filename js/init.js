@@ -165,27 +165,26 @@ StringArtGenerator.prototype.InitNails = function() {
 
     let nailsCount = +this.nailsCountBox.value
     let angle = 2 * Math.PI / nailsCount
-    let formType = this.formTypeBox.value
 
     for (let i = 0; i < nailsCount; i++) {
         let nail = {x: 0, y: 0}
         let t = i * angle
 
-        if (formType == CIRCLE_FORM) {
+        if (this.formType == CIRCLE_FORM) {
             nail = this.GetCircleNail(t)
         }
-        else if (formType == RECT_FORM) {
+        else if (this.formType == RECT_FORM) {
             nail = this.GetRectNail(t, this.x0, this.y0, this.width - 2*PADDING, this.height - 2*PADDING)
         }
-        else if (formType == ALBUM_FORM) {
+        else if (this.formType == ALBUM_FORM) {
             let size = this.width - 2*PADDING
             nail = this.GetRectNail(t, this.x0, this.y0, size, size / Math.sqrt(2))
         }
-        else if (formType == PORTRAIT_FORM) {
+        else if (this.formType == PORTRAIT_FORM) {
             let size = this.height - 2*PADDING
             nail = this.GetRectNail(t, this.x0, this.y0, size / Math.sqrt(2), size)
         }
-        else if (formType == IMAGE_FORM) {
+        else if (this.formType == IMAGE_FORM) {
             let width = this.imgWidth - 2 * PADDING
             let height = this.imgHeight - 2 * PADDING
             nail = this.GetRectNail(t, this.imgWidth / 2, this.imgHeight / 2, width, height)
@@ -276,19 +275,17 @@ StringArtGenerator.prototype.InitBbox = function() {
         ymax: this.height
     }
 
-    let formType = this.formTypeBox.value
-
-    if (formType == ALBUM_FORM) {
+    if (this.formType == ALBUM_FORM) {
         let height = Math.round(this.width / Math.sqrt(2))
         this.imgBbox.ymin = Math.round((this.height - height) / 2)
         this.imgBbox.ymax = this.imgBbox.ymin + height
     }
-    else if (formType == PORTRAIT_FORM) {
+    else if (this.formType == PORTRAIT_FORM) {
         let width = Math.round(this.height / Math.sqrt(2))
         this.imgBbox.xmin = Math.round((this.width - width) / 2)
         this.imgBbox.xmax = this.imgBbox.xmin + width
     }
-    else if (formType == IMAGE_FORM) {
+    else if (this.formType == IMAGE_FORM) {
         this.imgBbox.xmax = this.imgWidth
         this.imgBbox.ymax = this.imgHeight
     }

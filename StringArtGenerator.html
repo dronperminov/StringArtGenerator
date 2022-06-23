@@ -21,10 +21,10 @@
                 <input type="submit" id="select-btn" value="Выбрать изображение"><br>
             </div>
 
-            <div id="controls-box" style="display: none">
+            <div id="controls-box">
                 <div class="control-block no-top-padding">
                     <label><b>Форма</b>
-                        <select id="form-type-box">
+                        <select id="form-type-box" disabled>
                             <option value="circle" selected>круг</option>
                             <option value="rect">квадрат</option>
                             <option value="album">альбом</option>
@@ -35,51 +35,51 @@
                 </div>
 
                 <div class="control-block no-top-padding">
-                    <input type="checkbox" id="invert-box"> <label for="invert-box">Инвертировать яркость</label>
+                    <input type="checkbox" id="invert-box" disabled> <label for="invert-box">Инвертировать яркость</label>
                 </div>
 
                 <div class="control-block no-margin no-top-padding">
                     <label><b>Контрастность</b><br>
-                        <input type="range" id="contrast-box" value="0" min="-100" max="100" step="5">
+                        <input type="range" id="contrast-box" value="0" min="-100" max="100" step="5" disabled>
                     </label>
                     <div class="range-label" id="contrast-value">0</div>
 
                     <label><b>Яркость</b><br>
-                        <input type="range" id="brightness-box" value="0" min="-100" max="100" step="5">
+                        <input type="range" id="brightness-box" value="0" min="-100" max="100" step="5" disabled>
                     </label>
                     <div class="range-label" id="brightness-value">0</div>
                 </div>
 
                 <div class="control-block no-top-padding">
                     <label><b>Количество гвоздей</b><br>
-                        <input type="number" id="nails-count-box" value="250" min="50" max="1000">
+                        <input type="number" id="nails-count-box" value="250" min="50" max="1000" disabled>
                     </label>
                 </div>
 
                 <div class="control-block">
                     <label><b>Количество линий</b><br>
-                        <input type="number" id="lines-count-box" value="100" min="100" max="10000">
+                        <input type="number" id="lines-count-box" value="100" min="100" max="10000" disabled>
                     </label>
                 </div>
 
                 <div class="control-block">
                     <label><b>Непрозрачность линии</b><br>
-                        <input type="range" id="lines-weight-box" value="10" min="1" max="100">
+                        <input type="range" id="lines-weight-box" value="10" min="1" max="100" disabled>
                     </label>
                     <div class="range-label" id="lines-weight-value">10%</div>
                 </div>
 
                 <div class="control-block no-margin">
-                    <input type="color" id="lines-color-box" value="#000000"> <label for="lines-color-box"><b>Цвет линии</b></label>
+                    <input type="color" id="lines-color-box" value="#000000" disabled> <label for="lines-color-box"><b>Цвет линии</b></label>
                 </div>
 
                 <div class="control-block">
-                    <input type="color" id="background-color-box" value="#ffffff"> <label for="background-color-box"><b>Цвет фона</b></label>
+                    <input type="color" id="background-color-box" value="#ffffff" disabled> <label for="background-color-box"><b>Цвет фона</b></label>
                 </div>
 
                 <div class="control-block centered">
                     <input type="submit" id="generate-btn" value="Запустить" disabled>
-                    <input type="submit" id="reset-btn" value="Сбросить">
+                    <input type="submit" id="reset-btn" value="Сбросить" disabled>
                     <div id="status-box"></div>
                 </div>
             </div>
