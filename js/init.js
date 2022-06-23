@@ -42,18 +42,23 @@ StringArtGenerator.prototype.InitControls = function() {
     this.contrastBox = document.getElementById('contrast-box')
     this.contrastValue = document.getElementById('contrast-value')
     this.contrastBox.addEventListener('input', () => this.UpdateContrast())
-    this.contrastBox.addEventListener('change', () => this.DrawLoadedImage())
+    this.contrastBox.addEventListener('change', () => { this.UpdateContrast(); this.DrawLoadedImage() })
 
     this.brightnessBox = document.getElementById('brightness-box')
     this.brightnessValue = document.getElementById('brightness-value')
     this.brightnessBox.addEventListener('input', () => this.UpdateBrightness())
-    this.brightnessBox.addEventListener('change', () => this.DrawLoadedImage())
+    this.brightnessBox.addEventListener('change', () => { this.UpdateBrightness(); this.DrawLoadedImage() })
 
     this.nailsCountBox = document.getElementById('nails-count-box')
     this.nailsCountBox.addEventListener('change', () => this.InitArt())
 
     this.linesCountBox = document.getElementById('lines-count-box')
+
     this.linesWeightBox = document.getElementById('lines-weight-box')
+    this.linesWeightBox.addEventListener('input', () => this.UpdateWeight())
+    this.linesWeightBox.addEventListener('change', () => this.UpdateWeight())
+    this.linesWeightValue = document.getElementById('lines-weight-value')
+
     this.linesColorBox = document.getElementById('lines-color-box')
     this.infoBox = document.getElementById('info-box')
 

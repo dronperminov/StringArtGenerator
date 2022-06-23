@@ -66,6 +66,11 @@ StringArtGenerator.prototype.UpdateBrightness = function() {
         this.brightnessTable[i] = this.LimitPixel(i * brightness)
 }
 
+StringArtGenerator.prototype.UpdateWeight = function() {
+    let value = +this.linesWeightBox.value
+    this.linesWeightValue.innerHTML = `${value}%`
+}
+
 StringArtGenerator.prototype.GetPixels = function() {
     let data = this.ctx.getImageData(0, 0, this.width * this.dpr, this.height * this.dpr).data
     let pixels = []
@@ -146,11 +151,15 @@ StringArtGenerator.prototype.GetActions = function() {
     return actions
 }
 
+StringArtGenerator.prototype.GetLineWeight = function() {
+    return this.LimitPixel(+this.linesWeightBox.value / 100 * 255)
+}
+
 StringArtGenerator.prototype.GetLineColor = function() {
     let color = this.linesColorBox.value
-    let weight = +this.linesWeightBox.value
+    let weight = this.GetLineWeight()
 
-    return `${color}${this.LimitPixel(weight).toString(16).padStart(2, '0')}`
+    return `${color}${weight.toString(16).padStart(2, '0')}`
 }
 
 StringArtGenerator.prototype.ResetImage = function() {
@@ -235,7 +244,7 @@ StringArtGenerator.prototype.GenerateIteration = function(nail, linesCount, tota
 
     let nextNail = this.GetNextNail(nail)
     this.RemoveLine(nail, nextNail, lineWeight)
-    this.DrawLine(this.nails[nail], this.nails[nextNail], lineWeight, lineColor)
+    this.DrawLine(this.nails[nail], this.nails[nextNail], lineColor)
 
     window.requestAnimationFrame(() => this.GenerateIteration(nextNail, linesCount - 1, totalCount, lineWeight, lineColor, startTime))
 }
@@ -244,7 +253,7 @@ StringArtGenerator.prototype.Generate = function() {
     this.StartGenerate()
 
     let linesCount = +this.linesCountBox.value
-    let lineWeight = +this.linesWeightBox.value
+    let lineWeight = this.GetLineWeight()
     let lineColor = this.GetLineColor()
     let startTime = performance.now()
 
@@ -260,7 +269,6 @@ StringArtGenerator.prototype.ToStringArt = function() {
 }
 
 StringArtGenerator.prototype.ToSVG = function() {
-    let lineWeight = +this.linesWeightBox.value
     let svg = `<svg viewBox="0 0 ${this.width} ${this.height}" width="512" height="512" version="1.1" xmlns="http://www.w3.org/2000/svg">\n`
 
     for (let nail of this.nails)
