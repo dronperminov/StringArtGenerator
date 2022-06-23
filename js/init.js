@@ -17,6 +17,11 @@ StringArtGenerator.prototype.InitCanvas = function(canvas) {
     this.fakeCtx = this.fakeCanvas.getContext('2d')
     this.fakeCtx.scale(this.dpr, this.dpr)
 
+    this.pixelCanvas = document.createElement('canvas')
+    this.pixelCanvas.width = this.width
+    this.pixelCanvas.height = this.height
+    this.pixelCtx = this.pixelCanvas.getContext('2d')
+
     this.x0 = this.width / 2
     this.y0 = this.height / 2
     this.radius = Math.min(this.width, this.height) / 2 - PADDING
@@ -209,7 +214,7 @@ StringArtGenerator.prototype.LineRasterization = function(x1, y1, x2, y2) {
     let error = delta_x - delta_y
 
     while (x1 != x2 || y1 != y2) {
-        line.add(y1 * this.width * this.dpr + x1)
+        line.add(y1 * this.width + x1)
         error2 = error * 2
 
         if (error2 > -delta_y) {
@@ -223,7 +228,7 @@ StringArtGenerator.prototype.LineRasterization = function(x1, y1, x2, y2) {
         }
     }
 
-    line.add(y2 * this.width * this.dpr + x2)
+    line.add(y2 * this.width + x2)
     return line
 }
 
@@ -238,11 +243,11 @@ StringArtGenerator.prototype.InitLinesAnimation = function(nail) {
     this.generateBtn.setAttribute('disabled', '')
 
     for (let i = 0; i < nail; i++) {
-        let x1 = this.nails[nail].x * this.dpr
-        let y1 = this.nails[nail].y * this.dpr
+        let x1 = this.nails[nail].x
+        let y1 = this.nails[nail].y
 
-        let x2 = this.nails[i].x * this.dpr
-        let y2 = this.nails[i].y * this.dpr
+        let x2 = this.nails[i].x
+        let y2 = this.nails[i].y
 
         let line = this.LineRasterization(x1, y1, x2, y2)
         this.lines[nail][i] = line

@@ -80,7 +80,8 @@ StringArtGenerator.prototype.UpdateWeight = function() {
 }
 
 StringArtGenerator.prototype.GetPixels = function() {
-    let data = this.ctx.getImageData(0, 0, this.width * this.dpr, this.height * this.dpr).data
+    this.pixelCtx.drawImage(this.canvas, 0, 0, this.width, this.height)
+    let data = this.pixelCtx.getImageData(0, 0, this.width, this.height).data
     let pixels = []
 
     for (let i = 0; i < data.length; i += 4)
