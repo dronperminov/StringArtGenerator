@@ -72,6 +72,10 @@
     color: #aaa;
 }
 
+.control-block input:disabled + label {
+    color: #aaa;
+}
+
 .control-block hr {
     margin-top: 0;
 }

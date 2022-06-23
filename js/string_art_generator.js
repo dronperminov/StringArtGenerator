@@ -76,7 +76,7 @@ StringArtGenerator.prototype.GetPixels = function() {
     let pixels = []
 
     for (let i = 0; i < data.length; i += 4)
-        pixels.push(data[i])
+        pixels.push(this.GetLightness(data[i], data[i + 1], data[i + 2]))
 
     return pixels
 }

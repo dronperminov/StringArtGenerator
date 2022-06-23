@@ -1,6 +1,5 @@
 StringArtGenerator.prototype.Clear = function(ctx) {
-    ctx.fillStyle = BACKGROUND_COLOR
-    ctx.fillRect(0, 0, this.width, this.height)
+    ctx.clearRect(0, 0, this.width, this.height)
 }
 
 StringArtGenerator.prototype.GetLightness = function(red, green, blue) {
@@ -40,6 +39,9 @@ StringArtGenerator.prototype.DrawForm = function() {
     else if (formType == IMAGE_FORM) {
         this.ctx.rect(0, 0, this.imgWidth, this.imgHeight)
     }
+
+    this.ctx.fillStyle = this.backgroundColorBox.value
+    this.ctx.fill()
 }
 
 StringArtGenerator.prototype.DrawGrayScale = function() {
@@ -48,9 +50,13 @@ StringArtGenerator.prototype.DrawGrayScale = function() {
 
     let data = this.fakeCtx.getImageData(0, 0, this.width * this.dpr, this.height * this.dpr)
     let pixels = data.data
+    let invert = this.invertBox.checked
 
     for (let i = 0; i < pixels.length; i += 4) {
         let lightness = this.GetLightness(pixels[i], pixels[i + 1], pixels[i + 2])
+
+        if (invert)
+            lightness = 255 - lightness
 
         lightness = this.brightnessTable[lightness]
         lightness = this.contrastTable[lightness]
@@ -76,6 +82,7 @@ StringArtGenerator.prototype.DrawLoadedImage = function() {
 }
 
 StringArtGenerator.prototype.DrawNails = function() {
+    this.DrawForm()
     this.ctx.fillStyle = NAIL_COLOR
 
     for (let nail of this.nails) {

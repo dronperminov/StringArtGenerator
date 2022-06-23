@@ -39,6 +39,9 @@ StringArtGenerator.prototype.InitControls = function() {
     this.formTypeBox = document.getElementById('form-type-box')
     this.formTypeBox.addEventListener('change', () => this.UpdateForm())
 
+    this.invertBox = document.getElementById('invert-box')
+    this.invertBox.addEventListener('change', () => this.DrawLoadedImage())
+
     this.contrastBox = document.getElementById('contrast-box')
     this.contrastValue = document.getElementById('contrast-value')
     this.contrastBox.addEventListener('input', () => this.UpdateContrast())
@@ -60,6 +63,11 @@ StringArtGenerator.prototype.InitControls = function() {
     this.linesWeightValue = document.getElementById('lines-weight-value')
 
     this.linesColorBox = document.getElementById('lines-color-box')
+
+    this.backgroundColorBox = document.getElementById('background-color-box')
+    this.backgroundColorBox.addEventListener('change', () => this.DrawLoadedImage())
+    this.backgroundColorBox.addEventListener('input', () => this.DrawLoadedImage())
+
     this.infoBox = document.getElementById('info-box')
 
     this.generateBtn = document.getElementById('generate-btn')
@@ -72,6 +80,7 @@ StringArtGenerator.prototype.InitControls = function() {
 
     this.controls = [
         this.selectBtn,
+        this.invertBox,
         this.contrastBox,
         this.brightnessBox,
         this.formTypeBox,
@@ -79,6 +88,7 @@ StringArtGenerator.prototype.InitControls = function() {
         this.linesCountBox,
         this.linesWeightBox,
         this.linesColorBox,
+        this.backgroundColorBox,
         this.resetBtn
     ]
 
