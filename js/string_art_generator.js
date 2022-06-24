@@ -279,10 +279,11 @@ StringArtGenerator.prototype.Generate = function() {
 
 StringArtGenerator.prototype.ToStringArt = function() {
     return JSON.stringify({
-        'nails': this.nails.length,
+        'nails': this.nails,
         'color': this.GetLineColor(),
+        'background': this.backgroundColorBox.value,
         'sequence': this.sequence
-    })
+    }, null, '    ')
 }
 
 StringArtGenerator.prototype.ToSVG = function() {
