@@ -289,6 +289,18 @@ StringArtGenerator.prototype.ToStringArt = function() {
 StringArtGenerator.prototype.ToSVG = function() {
     let svg = `<svg viewBox="0 0 ${this.width} ${this.height}" width="512" height="512" version="1.1" xmlns="http://www.w3.org/2000/svg">\n`
 
+    if (this.formType == CIRCLE_FORM) {
+        svg += `    <circle cx="${this.x0}" cy="${this.y0}" r="${this.radius + PADDING / 2}" fill="${this.backgroundColorBox.value}" />\n`
+    }
+    else {
+        let x = this.imgBbox.xmin
+        let y = this.imgBbox.ymin
+        let width = this.imgBbox.xmax - this.imgBbox.xmin
+        let height = this.imgBbox.ymax - this.imgBbox.ymin
+
+        svg += `    <rect x="${x}" y="${y}" width="${width}" height="${height}" fill="${this.backgroundColorBox.value}" />\n`
+    }
+
     for (let nail of this.nails)
         svg += `    <circle cx="${nail.x}" cy="${nail.y}" r="${NAIL_RADIUS}" fill="${NAIL_COLOR}" />\n`
 
